@@ -1,0 +1,42 @@
+app:
+  - .github/filter.yml
+  - .github/workflows/app-*.yml
+  - apps/**/*
+  - packages/**/*
+  - .npmrc
+  - package.json
+  - pnpm-workspace.yml
+  - turbo.json
+
+api:
+  - .github/filter.yml
+  - .github/workflows/api-*.yml
+  - .github/workflows/app-*.yml
+  - apps/api/**/*
+  - packages/**/*
+  - .npmrc
+  - package.json
+  - pnpm-workspace.yml
+  - turbo.json
+
+web:
+  - .github/filter.yml
+  - .github/workflows/app-*.yml
+  - .github/workflows/web-*.yml
+  - apps/web/**/*
+  - packages/**/*
+  - .npmrc
+  - package.json
+  - pnpm-workspace.yml
+  - turbo.json
+
+mobile:
+  - .github/filter.yml
+  - .github/workflows/app-*.yml
+  - .github/workflows/mobile-*.yml
+  - apps/mobile/**/*
+  - packages/**/*
+  - .npmrc
+  - package.json
+  - pnpm-workspace.yml
+  - turbo.json
