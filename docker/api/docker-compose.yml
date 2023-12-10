@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: ../../
+      dockerfile: ./docker/api/Dockerfile
+      args:
+        - NODE_VERSION=18.16.1
+        - PORT=3000
+        - DISTROLESS_VERSION=18
+
+    image: shokupass/api:latest
+    container_name: shokupass-api
+    ports:
+      - 3000:3000
+    # env_file:
+    #   - ../../.env
+    #   - ../../.env.local

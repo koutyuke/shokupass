@@ -1,25 +1,25 @@
 {
-  "name": "@repo/ui",
+  "name": "@shokupass/ui",
   "version": "0.0.0",
   "private": true,
-  "exports": {
-    "./card": "./src/card.tsx",
-    "./code": "./src/code.tsx"
-  },
+  "type": "module",
+  "module": "nodenext",
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
-    "generate:component": "turbo gen react-component"
+    "fmt": "prettier --check ./**/*.{ts,tsx}",
+    "fmt:fix": "prettier --write ./**/*.{ts,tsx}",
+    "lint": "eslint ./**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix ./**/*.{ts,tsx",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@shokupass/eslint-config": "workspace:*",
+    "@shokupass/prettier-config": "workspace:*",
+    "@shokupass/typescript-config": "workspace:*",
+    "@shokupass/jest-config": "workspace:*",
     "@turbo/gen": "^1.10.12",
-    "@types/node": "^20.5.2",
-    "@types/eslint": "^8.44.7",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "eslint": "^8.53.0",
-    "react": "^18.2.0",
-    "typescript": "^5.2.2"
+    "react": "^18.2.0"
   }
 }

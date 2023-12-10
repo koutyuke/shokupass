@@ -1,0 +1,12 @@
+{
+  "extends": "@shokupass/typescript-config/expo.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "#ui/*": ["../../packages/ui/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["**/node_modules/**/*"]
+}
