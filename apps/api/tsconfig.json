@@ -1,0 +1,8 @@
+{
+  "extends": ["@shokupass/typescript-config/nestjs.json"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./"
+  },
+  "include": ["./src/**/*", "./test/**/*", "./*.*ts"]
+}
