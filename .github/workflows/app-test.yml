@@ -2,6 +2,10 @@ name: APP-Test
 
 on: push
 
+env:
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
 jobs:
   filter:
     runs-on: ubuntu-latest

@@ -5,4 +5,12 @@ module.exports = {
   parserOptions: {
     project: true,
   },
+  overrides: [
+    {
+      files: ["src/app/**/* "],
+      rules: {
+        "import/no-default-export": "off",
+      },
+    },
+  ],
 };
