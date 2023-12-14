@@ -4,4 +4,12 @@ module.exports = {
   parserOptions: {
     project: "./tsconfig.json",
   },
+  overrides: [
+    {
+      files: ["src/app/**/* "],
+      rules: {
+        "import/no-default-export": "off",
+      },
+    },
+  ],
 };
