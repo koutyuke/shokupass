@@ -39,3 +39,9 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
+
+# Google Sign-In
+GoogleService-Info.plist
+
+# ios
+ios/
