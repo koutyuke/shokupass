@@ -1,7 +1,7 @@
 import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
-import { sighIn } from "../utils/signIn";
+import { supabase } from "@/utils/supabase";
 
-const SignInButton = () => {
+const GoogleSignInButton = () => {
   GoogleSignin.configure({
     webClientId: process.env["EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID"]!,
   });
@@ -10,12 +10,11 @@ const SignInButton = () => {
       size={GoogleSigninButton.Size.Standard}
       color={GoogleSigninButton.Color.Dark}
       onPress={async () => {
-        // console.log("google sign in");
         try {
           await GoogleSignin.hasPlayServices();
           const userInfo = await GoogleSignin.signIn();
           if (userInfo.idToken) {
-            await sighIn(userInfo.idToken);
+            await supabase.auth.signInWithIdToken({ provider: "google", token: userInfo.idToken });
           } else {
             throw new Error("no ID token present!");
           }
@@ -28,4 +27,4 @@ const SignInButton = () => {
   );
 };
 
-export { SignInButton };
+export { GoogleSignInButton };
