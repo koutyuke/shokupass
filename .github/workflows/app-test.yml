@@ -132,6 +132,9 @@ jobs:
       - name: install
         run: pnpm install --frozen-lockfile
 
+      - name: generate prisma type
+        run: pnpm api prisma:generate
+
       - name: build
         run: pnpm turbo run build
 
@@ -205,6 +208,9 @@ jobs:
 
       - name: install
         run: pnpm install --frozen-lockfile
+
+      - name: generate prisma type
+        run: pnpm api prisma:generate
 
       - name: test
         run: pnpm turbo run test
