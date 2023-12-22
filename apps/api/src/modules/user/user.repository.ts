@@ -14,44 +14,21 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return (
-      user &&
-      new User({
-        ...user,
-        iconImage: user.icon_image,
-      })
-    );
+    return user && new User(user);
   }
 
   async findAll(): Promise<User[]> {
     const users = await this.prismaService.user.findMany();
 
-    return users.map(
-      user =>
-        new User({
-          ...user,
-          iconImage: user.icon_image,
-        }),
-    );
+    return users.map(user => new User(user));
   }
 
   async create(user: User): Promise<User> {
     const createdUser = await this.prismaService.user.create({
-      data: {
-        id: user.id,
-        name: user.name,
-        icon_image: user.iconImage,
-        provider: user.provider,
-      },
+      data: user,
     });
 
-    return (
-      createdUser &&
-      new User({
-        ...createdUser,
-        iconImage: createdUser.icon_image,
-      })
-    );
+    return createdUser && new User(createdUser);
   }
 
   async update(user: User): Promise<User> {
@@ -59,19 +36,10 @@ export class UserRepository implements IUserRepository {
       where: {
         id: user.id,
       },
-      data: {
-        name: user.name,
-        icon_image: user.iconImage,
-      },
+      data: user,
     });
 
-    return (
-      updatedUser &&
-      new User({
-        ...updatedUser,
-        iconImage: updatedUser.icon_image,
-      })
-    );
+    return updatedUser && new User(updatedUser);
   }
 
   async delete(userId: string): Promise<User> {
@@ -81,12 +49,6 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return (
-      deletedUser &&
-      new User({
-        ...deletedUser,
-        iconImage: deletedUser.icon_image,
-      })
-    );
+    return deletedUser && new User(deletedUser);
   }
 }
