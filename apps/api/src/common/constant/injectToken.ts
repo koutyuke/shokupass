@@ -1,3 +1,4 @@
 export enum InjectToken {
   USER_REPOSITORY = "USER_REPOSITORY",
+  MENU_REPOSITORY = "MENU_REPOSITORY",
 }
