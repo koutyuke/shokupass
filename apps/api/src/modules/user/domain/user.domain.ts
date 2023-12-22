@@ -1,4 +1,4 @@
-type Role = "ADMIN" | "USER";
+type Role = "ADMIN" | "USER" | "MODERATOR";
 
 type Provider = "GOOGLE" | "DISCORD";
 

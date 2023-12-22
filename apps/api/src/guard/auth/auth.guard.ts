@@ -19,8 +19,6 @@ export class AuthGuard implements CanActivate {
       .getUser(request.headers["authorization"]?.replace("Bearer ", ""))
       .then(res => res.data.user);
 
-    console.log("user", user);
-
     if (user === null) {
       return false;
     }
