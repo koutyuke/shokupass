@@ -12,6 +12,7 @@ datasource db {
 
 enum Role {
   ADMIN
+  MODERATOR
   USER
 }
 
@@ -20,10 +21,33 @@ enum Provider {
   DISCORD
 }
 
+enum MenuStatus {
+  RELEASED
+  PREPARATION
+  DELETED
+}
+
 model User {
-  id         String   @id @default(uuid())
-  name       String
-  icon_image String?
-  role       Role     @default(USER)
-  provider   Provider
+  id        String   @id @default(uuid())
+  name      String
+  iconImage String?  @map("icon_image")
+  role      Role     @default(USER)
+  provider  Provider
+
+  @@map("users")
+}
+
+model Menu {
+  id          String     @id @default(uuid())
+  name        String
+  price       Int
+  description String?
+  image       String?
+  quantity    Int        @default(0)
+  waitingTime Int        @map("waiting_time")
+  status      MenuStatus @default(PREPARATION)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("menus")
 }
