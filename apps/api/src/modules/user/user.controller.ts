@@ -1,4 +1,5 @@
 import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Role, Provider } from "src/common/dto/enum";
 import { AuthGuard, type RequestWithUser } from "src/guard/auth/auth.guard";
 import { UserUseCase } from "./user.use-case";
 
@@ -21,8 +22,8 @@ export class UserController {
         id: request.user.id,
         name: reqUser.user_metadata["custom_claims"].global_name,
         iconImage: reqUser.user_metadata["avatar_url"],
-        provider: "DISCORD",
-        role: "USER",
+        provider: Provider.DISCORD,
+        role: Role.USER,
       });
       return createUser;
     } else if (provider === "google") {
@@ -30,8 +31,8 @@ export class UserController {
         id: request.user.id,
         name: reqUser.user_metadata["full_name"],
         iconImage: reqUser.user_metadata["avatar_url"],
-        provider: "GOOGLE",
-        role: "USER",
+        provider: Provider.GOOGLE,
+        role: Role.USER,
       });
       return createUser;
     }
