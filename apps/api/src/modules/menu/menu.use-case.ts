@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { MenuStatus } from "@prisma/client";
 import { InjectToken } from "src/common/constant/injectToken";
-import { MenuStatus } from "src/common/dto/enum";
 import { Menu } from "./domain/menu.domain";
 import type { IMenuRepository } from "./interface/IMenuRepository";
 
@@ -27,12 +27,12 @@ export class MenuUseCase {
     return findManyMenu;
   }
 
-  async findReleased() {
+  async findMayByReleased() {
     const visibleMenus = await this.findMany(menu => menu.status === MenuStatus.RELEASED);
     return visibleMenus;
   }
 
-  async findUndeleted() {
+  async findMayByUndeleted() {
     const notDeletedMenus = await this.findMany(menu => menu.status !== MenuStatus.DELETED);
     return notDeletedMenus;
   }
@@ -47,16 +47,11 @@ export class MenuUseCase {
     return createMenu;
   }
 
-  async update(args: {
-    id: Menu["id"];
-    name?: Menu["name"];
-    price?: Menu["price"];
-    description?: Menu["description"];
-    image?: Menu["image"];
-    waitingTime?: Menu["waitingTime"];
-    quantity?: Menu["quantity"];
-    status?: Menu["status"];
-  }) {
+  async update(
+    args: {
+      id: Menu["id"];
+    } & Partial<Pick<Menu, "name" | "price" | "description" | "image" | "waitingTime" | "quantity" | "status">>,
+  ) {
     const findMenu = await this.menuRepository.find(args.id);
     if (!findMenu) {
       throw new Error("Menu not found");
@@ -64,13 +59,13 @@ export class MenuUseCase {
     const updateMenu = await this.menuRepository.update(
       new Menu({
         id: args.id,
-        name: args.name || findMenu.name,
-        price: args.price || findMenu.price,
-        description: args.description || findMenu.description,
-        image: args.image || findMenu.image,
-        waitingTime: args.waitingTime || findMenu.waitingTime,
-        quantity: args.quantity || findMenu.quantity,
-        status: args.status || findMenu.status,
+        name: args.name === undefined ? findMenu.name : args.name,
+        price: args.price === undefined ? findMenu.price : args.price,
+        description: args.description === undefined ? findMenu.description : args.description,
+        image: args.image === undefined ? findMenu.image : args.image,
+        waitingTime: args.waitingTime === undefined ? findMenu.waitingTime : args.waitingTime,
+        quantity: args.quantity === undefined ? findMenu.quantity : args.quantity,
+        status: args.status === undefined ? findMenu.status : args.status,
         createdAt: findMenu.createdAt,
         updatedAt: findMenu.updatedAt,
       }),
