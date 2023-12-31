@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "MenuStatus" ADD VALUE 'UNRELEASED';

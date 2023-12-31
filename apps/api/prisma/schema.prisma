@@ -22,9 +22,29 @@ enum Provider {
 }
 
 enum MenuStatus {
-  RELEASED
-  PREPARATION
-  DELETED
+  PREPARATION // 準備中
+  RELEASED // 公開中
+  UNRELEASED // 非公開
+  DELETED // 削除済み
+}
+
+enum PaymentStatus {
+  PENDING // 未決済
+  COMPLETED // 完了
+  REFUNDED // 返金済み
+  EXPIRED // 期限切れ
+  FAILED // 失敗
+}
+
+enum OrderStatus {
+  PENDING // 待機中
+  PAYMENT // 決済中
+  COOKING // 調理中
+  READY_FOR_PICKUP // 受け取り待ち
+  REFUNDED // 返金済み
+  COMPLETED // 完了
+  CANCELLED // キャンセル
+  DELETED // 削除済み
 }
 
 model User {
@@ -33,21 +53,61 @@ model User {
   iconImage String?  @map("icon_image")
   role      Role     @default(USER)
   provider  Provider
+  Order     Order[]
 
   @@map("users")
 }
 
 model Menu {
-  id          String     @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   price       Int
   description String?
   image       String?
-  quantity    Int        @default(0)
-  waitingTime Int        @map("waiting_time")
-  status      MenuStatus @default(PREPARATION)
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
+  quantity    Int         @default(0)
+  waitingTime Int         @map("waiting_time")
+  status      MenuStatus  @default(PREPARATION)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  MenuOrder   MenuOrder[]
 
   @@map("menus")
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  MenuOrder MenuOrder[]
+  paymentId String      @unique @map("payment_id")
+  payment   Payment     @relation(fields: [paymentId], references: [id])
+  userId    String      @map("user_id")
+  user      User        @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+model MenuOrder {
+  menuId       String @map("menu_id")
+  menu         Menu   @relation(fields: [menuId], references: [id])
+  orderId      String @map("order_id")
+  order        Order  @relation(fields: [orderId], references: [id])
+  menuQuantity Int    @map("menu_quantity")
+
+  @@id([menuId, orderId])
+  @@map("menu_orders")
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  codeId    String
+  status    PaymentStatus @default(PENDING)
+  deeplink  String
+  order     Order?
+  expiresAt DateTime      @map("expires_at")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@map("payments")
 }
