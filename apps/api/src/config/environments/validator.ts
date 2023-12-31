@@ -21,6 +21,18 @@ export class EnvValidator {
   @IsNotEmpty()
   @IsString()
   SUPABASE_ANON_KEY!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  PAYPAY_API_KEY!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  PAYPAY_API_SECRET!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  PAYPAY_MERCHANT_ID!: string;
 }
 
 export const validate = (config: Record<string, unknown>) => {
