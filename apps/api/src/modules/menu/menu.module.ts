@@ -14,5 +14,6 @@ import { MenuUseCase } from "./menu.use-case";
     },
     MenuUseCase,
   ],
+  exports: [MenuUseCase],
 })
 export class MenuModule {}

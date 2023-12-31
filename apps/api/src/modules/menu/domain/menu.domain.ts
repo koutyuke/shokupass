@@ -1,6 +1,6 @@
-import { MenuStatus } from "src/common/dto/enum";
+import { MenuStatus } from "../dto/menu.enum";
 
-type Status = "RELEASED" | "PREPARATION" | "DELETED";
+type Status = "RELEASED" | "PREPARATION" | "DELETED" | "UNRELEASED";
 
 export class Menu {
   readonly id: string;
@@ -40,5 +40,25 @@ export class Menu {
 
   get isReleased() {
     return this.status === MenuStatus.RELEASED;
+  }
+
+  get isPreparation() {
+    return this.status === MenuStatus.PREPARATION;
+  }
+
+  get isDeleted() {
+    return this.status === MenuStatus.DELETED;
+  }
+
+  get isUnreleased() {
+    return this.status === MenuStatus.UNRELEASED;
+  }
+
+  get isOutOfStock() {
+    return this.quantity <= 0;
+  }
+
+  get isInStock() {
+    return this.quantity > 0;
   }
 }
