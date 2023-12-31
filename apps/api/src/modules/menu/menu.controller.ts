@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Header, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Header, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { MenuStatus } from "@prisma/client";
 import { Roles } from "src/common/decorator/role.decorator";
 import { Role } from "src/common/dto/enum";
@@ -12,8 +12,20 @@ export class MenuController {
   @Get()
   @UseGuards(AuthGuard)
   async get() {
-    const menus = await this.menuUseCase.findReleased();
+    const menus = await this.menuUseCase.findMayByReleased();
     return menus;
+  }
+
+  @Get(":id")
+  @UseGuards(AuthGuard)
+  async getById(
+    @Param()
+    params: {
+      id: string;
+    },
+  ) {
+    const menu = await this.menuUseCase.find(params.id);
+    return menu;
   }
 
   @Post()
@@ -44,14 +56,17 @@ export class MenuController {
     return createMenu;
   }
 
-  @Patch()
+  @Patch(":id")
   @Header("Content-Type", "application/json")
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
   async update(
+    @Param()
+    params: {
+      id: string;
+    },
     @Body()
     body: {
-      id: string;
       name: string;
       description: string;
       price: number;
@@ -60,7 +75,7 @@ export class MenuController {
     },
   ) {
     const updateMenu = await this.menuUseCase.update({
-      id: body.id,
+      id: params.id,
       name: body.name,
       price: body.price,
       description: body.description,
@@ -71,21 +86,21 @@ export class MenuController {
     return updateMenu;
   }
 
-  @Delete()
+  @Delete(":id")
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
   async delete(
-    @Body()
-    body: {
+    @Param()
+    params: {
       id: string;
     },
   ) {
-    const deleteMenu = await this.menuUseCase.softDelete(body.id);
+    const deleteMenu = await this.menuUseCase.softDelete(params.id);
     return deleteMenu;
   }
 
   @Get("all")
-  @Roles([Role.MODERATOR, Role.ADMIN])
+  @Roles([Role.ADMIN])
   @UseGuards(AuthGuard)
   async getAll() {
     const menus = await this.menuUseCase.findAll();
@@ -96,7 +111,7 @@ export class MenuController {
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
   async getUndeleted() {
-    const menus = await this.menuUseCase.findUndeleted();
+    const menus = await this.menuUseCase.findMayByUndeleted();
     return menus;
   }
 }
