@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/infra/prisma/prisma.service";
+import { Locker } from "../locker/domain/locker.domain";
 import { Menu } from "../menu/domain/menu.domain";
 import { Payment } from "../payment/domain/payment.domain";
 import { Order } from "./domain/order.domain";
@@ -21,6 +22,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -33,6 +35,7 @@ export class OrderRepository implements IOrderRepository {
           quantity: menuOrder.menuQuantity,
         })),
         payment: order.payment && new Payment(order.payment),
+        locker: order.locker && new Locker(order.locker),
       })
     );
   }
@@ -50,6 +53,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -62,6 +66,7 @@ export class OrderRepository implements IOrderRepository {
           quantity: menuOrder.menuQuantity,
         })),
         payment: order.payment && new Payment(order.payment),
+        locker: order.locker && new Locker(order.locker),
       })
     );
   }
@@ -80,6 +85,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -92,6 +98,7 @@ export class OrderRepository implements IOrderRepository {
             quantity: menuOrder.menuQuantity,
           })),
           payment: order.payment && new Payment(order.payment),
+          locker: order.locker && new Locker(order.locker),
         }),
     );
   }
@@ -108,6 +115,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -120,6 +128,7 @@ export class OrderRepository implements IOrderRepository {
             quantity: menuOrder.menuQuantity,
           })),
           payment: order.payment && new Payment(order.payment),
+          locker: order.locker && new Locker(order.locker),
         }),
     );
   }
@@ -133,6 +142,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -145,6 +155,7 @@ export class OrderRepository implements IOrderRepository {
             quantity: menuOrder.menuQuantity,
           })),
           payment: order.payment && new Payment(order.payment),
+          locker: order.locker && new Locker(order.locker),
         }),
     );
   }
@@ -174,6 +185,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -186,6 +198,7 @@ export class OrderRepository implements IOrderRepository {
           quantity: menuOrder.menuQuantity,
         })),
         payment: createdOrder.payment && new Payment(createdOrder.payment),
+        locker: createdOrder.locker && new Locker(createdOrder.locker),
       })
     );
   }
@@ -203,6 +216,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -215,6 +229,7 @@ export class OrderRepository implements IOrderRepository {
           quantity: menuOrder.menuQuantity,
         })),
         payment: updatedOrder.payment && new Payment(updatedOrder.payment),
+        locker: updatedOrder.locker && new Locker(updatedOrder.locker),
       })
     );
   }
@@ -234,6 +249,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -246,6 +262,7 @@ export class OrderRepository implements IOrderRepository {
           quantity: menuOrder.menuQuantity,
         })),
         payment: updatedOrder.payment && new Payment(updatedOrder.payment),
+        locker: updatedOrder.locker && new Locker(updatedOrder.locker),
       })
     );
   }
@@ -262,6 +279,7 @@ export class OrderRepository implements IOrderRepository {
           },
         },
         payment: true,
+        locker: true,
       },
     });
 
@@ -274,6 +292,7 @@ export class OrderRepository implements IOrderRepository {
           quantity: menuOrder.menuQuantity,
         })),
         payment: deletedOrder.payment && new Payment(deletedOrder.payment),
+        locker: deletedOrder.locker && new Locker(deletedOrder.locker),
       })
     );
   }

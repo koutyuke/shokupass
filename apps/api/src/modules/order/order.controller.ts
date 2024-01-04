@@ -12,12 +12,13 @@ import {
   Res,
   UseGuards,
 } from "@nestjs/common";
-import { OrderStatus } from "@prisma/client";
 import type { Response } from "express";
 import { Roles } from "src/common/decorator/role.decorator";
 import { Role } from "src/common/dto/enum";
 import { AuthGuard, type RequestWithUser } from "src/guard/auth/auth.guard";
+import { LockerUseCase } from "../locker/locker.use-case";
 import { MenuUseCase } from "../menu/menu.use-case";
+import { OrderStatus } from "./dto/order.enum";
 import { OrderUseCase } from "./order.use-case";
 
 @Controller("orders")
@@ -25,6 +26,7 @@ export class OrderController {
   constructor(
     private readonly orderUseCase: OrderUseCase,
     private readonly menuUseCase: MenuUseCase,
+    private readonly lockerUseCase: LockerUseCase,
   ) {}
 
   @Get()
@@ -89,29 +91,43 @@ export class OrderController {
       return;
     }
 
-    if (findOrder.isPayment) {
-      const updatedPayment = await this.orderUseCase.updatePayment(params.id);
-      if (!updatedPayment) {
-        res.status(HttpStatus.BAD_REQUEST).send("Bad Request");
-        return;
-      }
-
-      if (updatedPayment.isExpired || updatedPayment.isFailed) {
-        const updatedOrder = await this.orderUseCase.setNewPayment(findOrder);
-        return updatedOrder;
-      }
-      if (updatedPayment.isCompleted) {
-        const updatedOrder = await this.orderUseCase.update(params.id, {
-          status: OrderStatus.COOKING,
-        });
-        return updatedOrder;
-      }
-    }
-
     return findOrder;
   }
 
-  @Get(":id/payment")
+  @Delete(":id")
+  @Roles([Role.MODERATOR, Role.ADMIN])
+  @UseGuards(AuthGuard)
+  async delete(
+    @Param()
+    params: {
+      id: string;
+    },
+  ) {
+    const deletedOrder = await this.orderUseCase.softDelete(params.id);
+    return deletedOrder;
+  }
+
+  @Patch(":id/status")
+  @Header("Content-Type", "application/json")
+  @Roles([Role.MODERATOR, Role.ADMIN])
+  @UseGuards(AuthGuard)
+  async update(
+    @Param()
+    params: {
+      id: string;
+    },
+    @Body()
+    body: {
+      status: OrderStatus;
+    },
+  ) {
+    const updatedOrder = await this.orderUseCase.update(params.id, {
+      status: body.status,
+    });
+    return updatedOrder;
+  }
+
+  @Patch(":id/payment")
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
   async getPayment(
@@ -150,36 +166,35 @@ export class OrderController {
     return findOrder.payment;
   }
 
-  @Patch(":id")
-  @Header("Content-Type", "application/json")
+  @Post(":id/locker")
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
-  async update(
+  async setLocker(
     @Param()
     params: {
       id: string;
     },
     @Body()
     body: {
-      status: OrderStatus;
+      lockerId: string;
     },
+    @Res({ passthrough: true })
+    res: Response,
   ) {
+    console.log(body, params);
+    const findOrder = await this.orderUseCase.find(params.id);
+    if (!findOrder) {
+      res.status(HttpStatus.NOT_FOUND).send("Not Found");
+      return;
+    }
+    // statusの更新
+    // lockerの接続
+    await this.lockerUseCase.updateOrderId(body.lockerId, params.id);
     const updatedOrder = await this.orderUseCase.update(params.id, {
-      status: body.status,
+      status: OrderStatus.READY_FOR_PICKUP,
     });
-    return updatedOrder;
-  }
+    // push通知
 
-  @Delete(":id")
-  @Roles([Role.MODERATOR, Role.ADMIN])
-  @UseGuards(AuthGuard)
-  async delete(
-    @Param()
-    params: {
-      id: string;
-    },
-  ) {
-    const deletedOrder = await this.orderUseCase.softDelete(params.id);
-    return deletedOrder;
+    return updatedOrder.locker;
   }
 }
