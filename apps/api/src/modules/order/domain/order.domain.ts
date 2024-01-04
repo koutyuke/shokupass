@@ -1,3 +1,4 @@
+import { Locker } from "src/modules/locker/domain/locker.domain";
 import { Menu } from "src/modules/menu/domain/menu.domain";
 import { Payment } from "src/modules/payment/domain/payment.domain";
 import { OrderStatus } from "../dto/order.enum";
@@ -23,6 +24,7 @@ export class Order {
   readonly items: OrderItem[];
   readonly status: Status;
   readonly payment: Payment;
+  readonly locker: Locker | null;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
@@ -32,6 +34,7 @@ export class Order {
     items: OrderItem[];
     status: Status;
     payment: Payment;
+    locker?: Locker | null;
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -40,6 +43,7 @@ export class Order {
     this.items = order.items;
     this.status = order.status;
     this.payment = order.payment;
+    this.locker = order.locker || null;
     this.createdAt = order.createdAt;
     this.updatedAt = order.updatedAt;
   }
