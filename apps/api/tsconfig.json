@@ -4,5 +4,5 @@
     "outDir": "./dist",
     "baseUrl": "./"
   },
-  "include": ["./src/**/*", "./test/**/*", "./*.*ts"]
+  "include": ["./src/**/*", "./test/**/*", "./prisma/*.ts", "./*.*ts"]
 }

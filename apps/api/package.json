@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json --passWithNoTests",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init && supabase db diff -f init",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "prisma:seed": "prisma db seed"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -54,5 +55,8 @@
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0"
+  },
+  "prisma": {
+    "seed": "ts-node --project ./tsconfig.tsnode.json ./prisma/seed.ts"
   }
 }
