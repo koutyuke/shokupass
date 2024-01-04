@@ -84,6 +84,7 @@ model Order {
   payment   Payment     @relation(fields: [paymentId], references: [id])
   userId    String      @map("user_id")
   user      User        @relation(fields: [userId], references: [id])
+  locker    Locker?
 
   @@map("orders")
 }
@@ -110,4 +111,12 @@ model Payment {
   updatedAt DateTime      @updatedAt @map("updated_at")
 
   @@map("payments")
+}
+
+model Locker {
+  id      String  @id
+  order   Order?  @relation(fields: [orderId], references: [id])
+  orderId String? @unique @map("order_id")
+
+  @@map("lockers")
 }
