@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, Req, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Param, Patch, Req, Res, UseGuards } from "@nestjs/common";
 import type { Response } from "express";
 import { Role, Provider } from "src/common/dto/enum";
 import { AuthGuard, type RequestWithUser } from "src/guard/auth/auth.guard";
@@ -77,28 +77,10 @@ export class UserController {
       return;
     }
 
-    if (findOrder.isPayment) {
-      const updatedPayment = await this.orderUseCase.updatePayment(params.id);
-      if (!updatedPayment) {
-        res.status(HttpStatus.BAD_REQUEST).send("not found");
-        return;
-      }
-
-      if (updatedPayment.isExpired || updatedPayment.isFailed) {
-        const updatedOrder = await this.orderUseCase.setNewPayment(findOrder);
-        return updatedOrder;
-      }
-      if (updatedPayment.isCompleted) {
-        const updatedOrder = await this.orderUseCase.update(params.id, {
-          status: OrderStatus.COOKING,
-        });
-        return updatedOrder;
-      }
-    }
     return findOrder;
   }
 
-  @Get("@me/orders/:id/payment")
+  @Patch("@me/orders/:id/payment")
   @UseGuards(AuthGuard)
   async getOrderPayment(
     @Req()
