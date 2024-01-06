@@ -57,6 +57,10 @@ export class OrderUseCase {
       })),
     );
 
+    if (!payment) {
+      return null;
+    }
+
     const createOrder = await this.orderRepository.create({
       ...order,
       paymentId: payment.id,
@@ -101,6 +105,10 @@ export class OrderUseCase {
         category: "Food",
       })),
     );
+
+    if (!newPayment) {
+      return null;
+    }
 
     const updatedOrder = await this.orderRepository.updatePaymentId(order.id, newPayment.id);
 

@@ -24,7 +24,7 @@ export class PaymentUseCase {
     const id = uuid();
     const paymentData = await this.paypayService.createPayment(id, price, redirectPath, items);
     if (!paymentData) {
-      throw new Error("Failed to generate payment link");
+      return null;
     }
 
     const payment = await this.paymentRepository.create({
@@ -40,14 +40,14 @@ export class PaymentUseCase {
   async delete(id: string) {
     const findPayment = await this.paymentRepository.find(id);
     if (!findPayment) {
-      throw new Error("Payment not found");
+      return null;
     }
     const { codeId } = findPayment;
 
     const res = await this.paypayService.deletePayment(codeId);
 
     if (!res) {
-      throw new Error("Failed to delete payment");
+      return null;
     }
 
     return id;
@@ -56,12 +56,12 @@ export class PaymentUseCase {
   async updateStatus(id: string) {
     const findPayment = await this.paymentRepository.find(id);
     if (!findPayment) {
-      throw new Error("Payment not found");
+      return null;
     }
 
     const updatedPaymentStatus = await this.paypayService.paymentStatus(findPayment.id);
     if (!updatedPaymentStatus) {
-      throw new Error("Failed to Get payment status");
+      return null;
     }
 
     if (updatedPaymentStatus === "CREATED") {
@@ -112,7 +112,7 @@ export class PaymentUseCase {
   async setExpired(id: string) {
     const findPayment = await this.paymentRepository.find(id);
     if (!findPayment) {
-      throw new Error("Payment not found");
+      return null;
     }
 
     const updatedPayment = await this.paymentRepository.update(
