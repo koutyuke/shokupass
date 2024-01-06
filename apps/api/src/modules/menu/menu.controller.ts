@@ -5,14 +5,14 @@ import { Role } from "src/common/dto/enum";
 import { AuthGuard } from "src/guard/auth/auth.guard";
 import { MenuUseCase } from "./menu.use-case";
 
-@Controller("menus")
+@Controller("menu")
 export class MenuController {
   constructor(private readonly menuUseCase: MenuUseCase) {}
 
   @Get()
   @UseGuards(AuthGuard)
   async get() {
-    const menus = await this.menuUseCase.findMayByReleased();
+    const menus = await this.menuUseCase.findMayByStatus([MenuStatus.PREPARATION]);
     return menus;
   }
 
@@ -99,19 +99,17 @@ export class MenuController {
     return deleteMenu;
   }
 
-  @Get("all")
-  @Roles([Role.ADMIN])
+  @Get("status/:status")
+  @Roles([Role.ADMIN, Role.MODERATOR])
   @UseGuards(AuthGuard)
-  async getAll() {
-    const menus = await this.menuUseCase.findAll();
-    return menus;
-  }
-
-  @Get("undeleted")
-  @Roles([Role.MODERATOR, Role.ADMIN])
-  @UseGuards(AuthGuard)
-  async getUndeleted() {
-    const menus = await this.menuUseCase.findMayByUndeleted();
+  async getAll(
+    @Param()
+    params: {
+      status: MenuStatus[];
+    },
+  ) {
+    const uniqueStatus = [...new Set(params.status)];
+    const menus = await this.menuUseCase.findMayByStatus(uniqueStatus);
     return menus;
   }
 }
