@@ -23,18 +23,13 @@ export class MenuUseCase {
   }
 
   async findManyById(ids: string[]) {
-    const findManyMenu = await this.menuRepository.findMany(ids);
+    const findManyMenu = await this.menuRepository.findManyById(ids);
     return findManyMenu;
   }
 
-  async findMayByReleased() {
-    const visibleMenus = await this.findMany(menu => menu.status === MenuStatus.RELEASED);
+  async findMayByStatus(status: MenuStatus[]) {
+    const visibleMenus = await this.findMany(menu => status.includes(menu.status));
     return visibleMenus;
-  }
-
-  async findMayByUndeleted() {
-    const notDeletedMenus = await this.findMany(menu => menu.status !== MenuStatus.DELETED);
-    return notDeletedMenus;
   }
 
   async findAll() {
