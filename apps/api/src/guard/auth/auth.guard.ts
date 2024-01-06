@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { User } from "@supabase/supabase-js";
 import { Roles } from "src/common/decorator/role.decorator";
@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
       .then(res => res.data.user);
 
     if (user === null) {
-      return false;
+      throw new UnauthorizedException();
     }
     const roles = this.reflector.get<Role | undefined>(Roles, context.getHandler());
     request.user = user;
@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
     if (roles.includes(findUser?.role ?? "")) {
       return true;
     }
-    return false;
+    throw new UnauthorizedException();
   }
 }
 
