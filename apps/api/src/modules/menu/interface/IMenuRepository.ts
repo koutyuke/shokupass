@@ -2,7 +2,7 @@ import type { Menu } from "../domain/menu.domain";
 
 export interface IMenuRepository {
   find(id: Menu["id"]): Promise<Menu | null>;
-  findMany(ids: Menu["id"][]): Promise<Menu[]>;
+  findManyById(ids: Menu["id"][]): Promise<Menu[]>;
   findAll(): Promise<Menu[]>;
   create(menu: {
     id?: Menu["id"];
