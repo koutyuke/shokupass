@@ -17,7 +17,7 @@ export class MenuRepository implements IMenuRepository {
     return menu && new Menu(menu);
   }
 
-  async findMany(ids: string[]): Promise<Menu[]> {
+  async findManyById(ids: string[]): Promise<Menu[]> {
     const menus = await this.prismaService.menu.findMany({
       where: {
         id: {
