@@ -1,5 +1,4 @@
-import { Controller, Get, HttpStatus, Param, Patch, Req, Res, UseGuards } from "@nestjs/common";
-import type { Response } from "express";
+import { BadRequestException, Controller, Get, NotFoundException, Param, Patch, Req, UseGuards } from "@nestjs/common";
 import { Role, Provider } from "src/common/dto/enum";
 import { AuthGuard, type RequestWithUser } from "src/guard/auth/auth.guard";
 import { OrderStatus } from "../order/dto/order.enum";
@@ -18,8 +17,6 @@ export class UserController {
   async create(
     @Req()
     request: RequestWithUser,
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     const reqUser = request.user;
     const findUser = await this.userUseCase.find(request.user.id);
@@ -47,8 +44,7 @@ export class UserController {
       });
       return createUser;
     }
-    res.status(HttpStatus.BAD_REQUEST).send("Bad Request");
-    return;
+    throw new BadRequestException();
   }
 
   @Get("@me/orders")
@@ -67,14 +63,11 @@ export class UserController {
     params: {
       id: string;
     },
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     const findOrder = await this.orderUseCase.findByUserIdAndId(request.user.id, params.id);
 
     if (!findOrder) {
-      res.status(HttpStatus.NOT_FOUND).send("Not Found");
-      return;
+      throw new NotFoundException();
     }
 
     return findOrder;
@@ -89,25 +82,24 @@ export class UserController {
     params: {
       id: string;
     },
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     const findOrder = await this.orderUseCase.findByUserIdAndId(request.user.id, params.id);
 
     if (!findOrder) {
-      res.status(HttpStatus.NOT_FOUND).send("Not Found");
-      return;
+      throw new NotFoundException();
     }
 
     if (findOrder.isPayment) {
       const updatedPayment = await this.orderUseCase.updatePayment(params.id);
       if (!updatedPayment) {
-        res.status(HttpStatus.BAD_REQUEST).send("Bad Request");
-        return;
+        throw new BadRequestException();
       }
 
       if (updatedPayment.isExpired) {
         const updatedOrder = await this.orderUseCase.setNewPayment(findOrder);
+        if (!updatedOrder) {
+          throw new BadRequestException();
+        }
         return updatedOrder.payment;
       }
       if (updatedPayment.isCompleted) {

@@ -1,18 +1,17 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Header,
-  HttpStatus,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Req,
-  Res,
   UseGuards,
 } from "@nestjs/common";
-import type { Response } from "express";
 import { Roles } from "src/common/decorator/role.decorator";
 import { Role } from "src/common/dto/enum";
 import { AuthGuard, type RequestWithUser } from "src/guard/auth/auth.guard";
@@ -50,15 +49,12 @@ export class OrderController {
         quantity: number;
       }[];
     },
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     const menus = await this.menuUseCase.findManyById(body.items.map(item => item.menuId));
     const purchaseableMenus = menus.filter(menu => menu.isReleased && menu.isInStock);
     console.log(purchaseableMenus);
     if (purchaseableMenus.length !== body.items.length) {
-      res.status(HttpStatus.BAD_REQUEST).send("Bad Request");
-      return;
+      throw new BadRequestException();
     }
 
     const createOrder = await this.orderUseCase.create({
@@ -81,14 +77,11 @@ export class OrderController {
     params: {
       id: string;
     },
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     const findOrder = await this.orderUseCase.find(params.id);
 
     if (!findOrder) {
-      res.status(HttpStatus.NOT_FOUND).send("Not Found");
-      return;
+      throw new BadRequestException();
     }
 
     return findOrder;
@@ -135,24 +128,23 @@ export class OrderController {
     params: {
       id: string;
     },
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     const findOrder = await this.orderUseCase.find(params.id);
     if (!findOrder) {
-      res.status(HttpStatus.NOT_FOUND).send("Not Found");
-      return;
+      throw new NotFoundException();
     }
 
     if (findOrder.isPayment) {
       const updatedPayment = await this.orderUseCase.updatePayment(params.id);
       if (!updatedPayment) {
-        res.status(HttpStatus.BAD_REQUEST).send("Bad Request");
-        return;
+        throw new BadRequestException();
       }
 
       if (updatedPayment.isExpired) {
         const updatedOrder = await this.orderUseCase.setNewPayment(findOrder);
+        if (!updatedOrder) {
+          throw new BadRequestException();
+        }
         return updatedOrder.payment;
       }
       if (updatedPayment.isCompleted) {
@@ -178,14 +170,11 @@ export class OrderController {
     body: {
       lockerId: string;
     },
-    @Res({ passthrough: true })
-    res: Response,
   ) {
     console.log(body, params);
     const findOrder = await this.orderUseCase.find(params.id);
     if (!findOrder) {
-      res.status(HttpStatus.NOT_FOUND).send("Not Found");
-      return;
+      throw new NotFoundException();
     }
     // statusの更新
     // lockerの接続
