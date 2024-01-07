@@ -17,7 +17,6 @@
     "@shokupass/prettier-config": "workspace:*",
     "@shokupass/typescript-config": "workspace:*",
     "@shokupass/jest-config": "workspace:*",
-    "@turbo/gen": "^1.10.12",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "react": "^18.2.0"
