@@ -1,0 +1,25 @@
+{
+  "name": "@shokupass/api-contract",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "module": "nodenext",
+  "scripts": {
+    "fmt": "prettier --check ./**/*.{ts,tsx}",
+    "fmt:fix": "prettier --write ./**/*.{ts,tsx}",
+    "lint": "eslint ./**/*.{ts,tsx}",
+    "lint-fix": "eslint --fix ./**/*.{ts,tsx",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests"
+  },
+  "dependencies": {
+    "@ts-rest/core": "^3.30.5",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@shokupass/eslint-config": "workspace:*",
+    "@shokupass/jest-config": "workspace:*",
+    "@shokupass/prettier-config": "workspace:*",
+    "@shokupass/typescript-config": "workspace:*"
+  }
+}

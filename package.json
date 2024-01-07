@@ -10,7 +10,8 @@
     "mobile": "pnpm --filter @shokupass/mobile",
     "web": "pnpm --filter @shokupass/web",
     "api": "pnpm --filter @shokupass/api",
-    "ui": "pnpm --filter @shokupass/ui"
+    "ui": "pnpm --filter @shokupass/ui",
+    "api-contract": "pnpm --filter @shokupass/api-contract"
   },
   "devDependencies": {
     "prettier": "^3.1.0",
