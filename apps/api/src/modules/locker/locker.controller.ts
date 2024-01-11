@@ -1,5 +1,6 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
-import type { Response } from "express";
+import { BadRequestException, Controller, NotFoundException, UseGuards } from "@nestjs/common";
+import { apiContract } from "@shokupass/api-contracts";
+import { TsRestHandler, tsRestHandler } from "@ts-rest/nest";
 import { Roles } from "src/common/decorator/role.decorator";
 import { Role } from "src/common/dto/enum";
 import { AuthGuard } from "src/guard/auth/auth.guard";
@@ -7,64 +8,63 @@ import { OrderStatus } from "../order/dto/order.enum";
 import { OrderUseCase } from "../order/order.use-case";
 import { LockerUseCase } from "./locker.use-case";
 
-@Controller("lockers")
+@Controller()
 export class LockerController {
   constructor(
     private readonly lockerUseCase: LockerUseCase,
     private readonly orderUseCase: OrderUseCase,
   ) {}
 
-  @Get()
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
+  @TsRestHandler(apiContract.locker.GetLockers)
   async getLockers() {
-    const lockers = await this.lockerUseCase.findAll();
-    return lockers;
-  }
-
-  @Get(":id")
-  @Roles([Role.MODERATOR, Role.ADMIN])
-  @UseGuards(AuthGuard)
-  async getLocker(
-    @Param()
-    params: {
-      id: string;
-    },
-  ) {
-    const locker = await this.lockerUseCase.find(params.id);
-    return locker;
-  }
-
-  @Post(":id/open")
-  @Roles([Role.MODERATOR, Role.ADMIN])
-  @UseGuards(AuthGuard)
-  async openLocker(
-    @Param()
-    params: {
-      id: string;
-    },
-    @Body()
-    body: {
-      orderId: string;
-    },
-    @Res({ passthrough: true })
-    res: Response,
-  ) {
-    const locker = await this.lockerUseCase.find(params.id);
-    if (!locker) {
-      res.status(HttpStatus.NOT_FOUND).send("Not Found");
-      return;
-    }
-    if (locker.orderId !== body.orderId) {
-      res.status(HttpStatus.BAD_REQUEST).send("Bad Request");
-      return;
-    }
-
-    await this.orderUseCase.update(locker.orderId, {
-      status: OrderStatus.COMPLETED,
+    return tsRestHandler(apiContract.locker.GetLockers, async () => {
+      const lockers = await this.lockerUseCase.findAll();
+      return {
+        status: 200,
+        body: lockers,
+      };
     });
-    await this.lockerUseCase.updateOrderId(params.id, null);
-    res.status(HttpStatus.OK).send("OK");
-    return;
+  }
+
+  @Roles([Role.MODERATOR, Role.ADMIN])
+  @UseGuards(AuthGuard)
+  @TsRestHandler(apiContract.locker.GetLocker)
+  async getLocker() {
+    return tsRestHandler(apiContract.locker.GetLocker, async ({ params }) => {
+      const locker = await this.lockerUseCase.find(params.id);
+      if (!locker) {
+        throw new NotFoundException();
+      }
+      return {
+        status: 200,
+        body: locker,
+      };
+    });
+  }
+
+  @Roles([Role.MODERATOR, Role.ADMIN])
+  @UseGuards(AuthGuard)
+  @TsRestHandler(apiContract.locker.OpenLocker)
+  async openLocker() {
+    return tsRestHandler(apiContract.locker.OpenLocker, async ({ params, body }) => {
+      const locker = await this.lockerUseCase.find(params.id);
+      if (!locker) {
+        throw new NotFoundException();
+      }
+      if (locker.orderId !== body.orderId) {
+        throw new BadRequestException();
+      }
+
+      await this.orderUseCase.update(locker.orderId, {
+        status: OrderStatus.COMPLETED,
+      });
+      const updatedLocker = await this.lockerUseCase.updateOrderId(params.id, null);
+      return {
+        status: 200,
+        body: updatedLocker,
+      };
+    });
   }
 }
