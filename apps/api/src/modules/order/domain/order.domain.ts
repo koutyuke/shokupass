@@ -1,28 +1,14 @@
 import { Locker } from "src/modules/locker/domain/locker.domain";
-import { Menu } from "src/modules/menu/domain/menu.domain";
 import { Payment } from "src/modules/payment/domain/payment.domain";
 import { OrderStatus } from "../dto/order.enum";
-
-type Status =
-  | "PENDING"
-  | "PAYMENT"
-  | "COOKING"
-  | "READY_FOR_PICKUP"
-  | "COMPLETED"
-  | "CANCELLED"
-  | "REFUNDED"
-  | "DELETED";
-
-type OrderItem = {
-  menu: Menu;
-  quantity: number;
-};
+import { OrderStatus as OrderStatusType } from "../dto/order.type";
+import { OrderItem } from "../dto/order.type";
 
 export class Order {
   readonly id: string;
   readonly userId: string;
   readonly items: OrderItem[];
-  readonly status: Status;
+  readonly status: OrderStatusType;
   readonly payment: Payment;
   readonly locker: Locker | null;
   readonly createdAt: Date;
@@ -32,7 +18,7 @@ export class Order {
     id: string;
     userId: string;
     items: OrderItem[];
-    status: Status;
+    status: OrderStatusType;
     payment: Payment;
     locker?: Locker | null;
     createdAt: Date;
