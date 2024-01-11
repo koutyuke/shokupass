@@ -3,10 +3,9 @@
   "extends": "./base.json",
   "display": "NestJS",
   "compilerOptions": {
-    "target": "ES2021",
+    "target": "ES2022",
     "composite": true,
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,

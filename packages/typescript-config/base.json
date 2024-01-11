@@ -3,6 +3,6 @@
   "extends": "@tsconfig/strictest/tsconfig.json",
   "display": "Default",
   "compilerOptions": {
-    "target": "ESNext"
+    "target": "ES2022"
   }
 }

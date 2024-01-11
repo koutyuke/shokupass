@@ -34,7 +34,6 @@ export class MenuRepository implements IMenuRepository {
     price: Menu["price"];
     description: Menu["description"];
     image: Menu["image"];
-    waitingTime: Menu["waitingTime"];
     quantity: Menu["quantity"];
     status: Menu["status"];
     createdAt?: Menu["createdAt"];

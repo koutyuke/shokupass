@@ -37,7 +37,7 @@ export class MenuUseCase {
     return findAll;
   }
 
-  async create(menu: Pick<Menu, "name" | "price" | "description" | "image" | "waitingTime" | "quantity" | "status">) {
+  async create(menu: Pick<Menu, "name" | "price" | "description" | "image" | "quantity" | "status">) {
     const createMenu = await this.menuRepository.create(menu);
     return createMenu;
   }
@@ -45,7 +45,7 @@ export class MenuUseCase {
   async update(
     args: {
       id: Menu["id"];
-    } & Partial<Pick<Menu, "name" | "price" | "description" | "image" | "waitingTime" | "quantity" | "status">>,
+    } & Partial<Pick<Menu, "name" | "price" | "description" | "image" | "quantity" | "status">>,
   ) {
     const findMenu = await this.menuRepository.find(args.id);
     if (!findMenu) {
@@ -58,7 +58,6 @@ export class MenuUseCase {
         price: args.price === undefined ? findMenu.price : args.price,
         description: args.description === undefined ? findMenu.description : args.description,
         image: args.image === undefined ? findMenu.image : args.image,
-        waitingTime: args.waitingTime === undefined ? findMenu.waitingTime : args.waitingTime,
         quantity: args.quantity === undefined ? findMenu.quantity : args.quantity,
         status: args.status === undefined ? findMenu.status : args.status,
         createdAt: findMenu.createdAt,

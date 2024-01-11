@@ -9,7 +9,6 @@ export class Menu {
   readonly description: string | null;
   readonly image: string | null;
   readonly quantity: number;
-  readonly waitingTime: number;
   readonly status: Status;
   readonly createdAt: Date;
   readonly updatedAt: Date;
@@ -21,7 +20,6 @@ export class Menu {
     description: string | null;
     image: string | null;
     quantity: number;
-    waitingTime: number;
     status: Status;
     createdAt: Date;
     updatedAt: Date;
@@ -32,7 +30,6 @@ export class Menu {
     this.description = menu.description;
     this.image = menu.image;
     this.quantity = menu.quantity;
-    this.waitingTime = menu.waitingTime;
     this.status = menu.status;
     this.createdAt = menu.createdAt;
     this.updatedAt = menu.updatedAt;
