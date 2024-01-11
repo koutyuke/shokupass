@@ -46,6 +46,9 @@ enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
 enable_signup = true
 
+[auth.email]
+enable_signup = true
+
 [auth.external.google]
 enabled = true
 secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
