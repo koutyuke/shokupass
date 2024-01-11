@@ -23,8 +23,7 @@ enum Provider {
 
 enum MenuStatus {
   PREPARATION // 準備中
-  RELEASED // 公開中
-  UNRELEASED // 非公開
+  AVAILABLE // 販売中
   DELETED // 削除済み
 }
 
