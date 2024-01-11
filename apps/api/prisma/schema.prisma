@@ -65,7 +65,6 @@ model Menu {
   description String?
   image       String?
   quantity    Int         @default(0)
-  waitingTime Int         @map("waiting_time")
   status      MenuStatus  @default(PREPARATION)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
