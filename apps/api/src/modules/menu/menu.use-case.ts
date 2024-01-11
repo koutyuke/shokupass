@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { MenuStatus } from "@prisma/client";
 import { InjectToken } from "src/common/constant/injectToken";
 import { Menu } from "./domain/menu.domain";
+import { MenuStatus } from "./dto/menu.type";
 import type { IMenuRepository } from "./interface/IMenuRepository";
 
 @Injectable()
@@ -27,7 +27,7 @@ export class MenuUseCase {
     return findManyMenu;
   }
 
-  async findMayByStatus(status: MenuStatus[]) {
+  async findManyByStatus(status: MenuStatus[]) {
     const visibleMenus = await this.findMany(menu => status.includes(menu.status));
     return visibleMenus;
   }

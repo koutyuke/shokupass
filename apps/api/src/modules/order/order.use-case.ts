@@ -3,6 +3,7 @@ import { InjectToken } from "src/common/constant/injectToken";
 import { PaymentUseCase } from "../payment/payment.use-case";
 import { Order } from "./domain/order.domain";
 import { OrderStatus } from "./dto/order.enum";
+import { OrderStatus as OrderStatusType } from "./dto/order.type";
 import type { IOrderRepository } from "./interface/IOrderRepository";
 
 @Injectable()
@@ -42,6 +43,11 @@ export class OrderUseCase {
   async findManyByUserId(userId: string) {
     const findManyOrderByUserId = await this.orderRepository.findManyByUserId(userId);
     return findManyOrderByUserId;
+  }
+
+  async findManyByStatus(status: OrderStatusType[]) {
+    const findManyOrderByStatus = await this.findMany(order => status.includes(order.status));
+    return findManyOrderByStatus;
   }
 
   async create(order: Pick<Order, "userId" | "items" | "status">) {

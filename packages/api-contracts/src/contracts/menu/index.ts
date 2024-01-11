@@ -1,17 +1,17 @@
 import { AppRouter } from "@ts-rest/core";
 import {
   GetMenus,
+  GetMenusOnAvailable,
   CreateMenu,
   GetMenu,
   DeleteMenu,
   UpdateMenu,
   UpdateMenuStatus,
-  GetMenusByStatus,
 } from "./menu.contract";
 
 const menuRoutes = {
   GetMenus,
-  GetMenusByStatus,
+  GetMenusOnAvailable,
   CreateMenu,
   GetMenu,
   DeleteMenu,

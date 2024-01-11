@@ -5,6 +5,9 @@ import { lockerModel, orderModel, orderStatusModel, paymentModel } from "@/model
 const GetOrders = {
   method: "GET",
   path: "/orders",
+  query: z.object({
+    status: z.string().optional(),
+  }),
   responses: {
     200: z.array(orderModel),
   },

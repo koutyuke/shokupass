@@ -1,6 +1,5 @@
 import { MenuStatus } from "../dto/menu.enum";
-
-type Status = "RELEASED" | "PREPARATION" | "DELETED" | "UNRELEASED";
+import { MenuStatus as MenuStatusType } from "../dto/menu.type";
 
 export class Menu {
   readonly id: string;
@@ -9,7 +8,7 @@ export class Menu {
   readonly description: string | null;
   readonly image: string | null;
   readonly quantity: number;
-  readonly status: Status;
+  readonly status: MenuStatusType;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
@@ -20,7 +19,7 @@ export class Menu {
     description: string | null;
     image: string | null;
     quantity: number;
-    status: Status;
+    status: MenuStatusType;
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -35,8 +34,8 @@ export class Menu {
     this.updatedAt = menu.updatedAt;
   }
 
-  get isReleased() {
-    return this.status === MenuStatus.RELEASED;
+  get isAvailable() {
+    return this.status === MenuStatus.AVAILABLE;
   }
 
   get isPreparation() {
@@ -45,10 +44,6 @@ export class Menu {
 
   get isDeleted() {
     return this.status === MenuStatus.DELETED;
-  }
-
-  get isUnreleased() {
-    return this.status === MenuStatus.UNRELEASED;
   }
 
   get isOutOfStock() {

@@ -1,15 +1,14 @@
 import { z } from "zod";
 
-export type MenuStatusType = "RELEASED" | "PREPARATION" | "DELETED" | "UNRELEASED";
+export type MenuStatusType = "AVAILABLE" | "PREPARATION" | "DELETED";
 
 export enum MenuStatusEnum {
-  RELEASED = "RELEASED",
+  AVAILABLE = "AVAILABLE",
   PREPARATION = "PREPARATION",
-  UNRELEASED = "UNRELEASED",
   DELETED = "DELETED",
 }
 
-export const menuStatusModel = z.enum(["RELEASED", "PREPARATION", "DELETED", "UNRELEASED"]);
+export const menuStatusModel = z.enum(["AVAILABLE", "PREPARATION", "DELETED"]);
 
 export const menuModel = z.object({
   id: z.string(),

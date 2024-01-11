@@ -17,13 +17,26 @@ export class OrderController {
     private readonly lockerUseCase: LockerUseCase,
   ) {}
 
-  @Header("Content-Type", "application/json")
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
   @TsRestHandler(apiContract.order.GetOrders)
   async getOrders() {
-    return tsRestHandler(apiContract.order.GetOrders, async () => {
-      const orders = await this.orderUseCase.findAll();
+    return tsRestHandler(apiContract.order.GetOrders, async ({ query }) => {
+      if (!query.status) {
+        const orders = await this.orderUseCase.findAll();
+        return {
+          status: 200,
+          body: orders,
+        };
+      }
+
+      const ununiqueStatus = query.status.split(",").reduce((acc, cur) => {
+        Object.values(OrderStatus).includes(cur as OrderStatus) && acc.push(cur as OrderStatus);
+        return acc;
+      }, [] as OrderStatus[]);
+      const uniqueStatus = [...new Set(ununiqueStatus)] as OrderStatus[];
+      const orders = await this.orderUseCase.findManyByStatus(uniqueStatus);
+
       return {
         status: 200,
         body: orders,
@@ -40,7 +53,7 @@ export class OrderController {
   ) {
     return tsRestHandler(apiContract.order.CreateOrder, async ({ body }) => {
       const menus = await this.menuUseCase.findManyById(body.items.map(item => item.menuId));
-      const purchaseableMenus = menus.filter(menu => menu.isReleased && menu.isInStock);
+      const purchaseableMenus = menus.filter(menu => menu.isAvailable && menu.isInStock);
       if (purchaseableMenus.length !== body.items.length) {
         throw new BadRequestException();
       }
@@ -184,29 +197,4 @@ export class OrderController {
       };
     });
   }
-  // async setLocker(
-  //   @Param()
-  //   params: {
-  //     id: string;
-  //   },
-  //   @Body()
-  //   body: {
-  //     lockerId: string;
-  //   },
-  // ) {
-  //   console.log(body, params);
-  //   const findOrder = await this.orderUseCase.find(params.id);
-  //   if (!findOrder) {
-  //     throw new NotFoundException();
-  //   }
-  //   // statusの更新
-  //   // lockerの接続
-  //   await this.lockerUseCase.updateOrderId(body.lockerId, params.id);
-  //   const updatedOrder = await this.orderUseCase.update(params.id, {
-  //     status: OrderStatus.READY_FOR_PICKUP,
-  //   });
-  //   // push通知
-
-  //   return updatedOrder.locker;
-  // }
 }

@@ -11,11 +11,38 @@ import { MenuUseCase } from "./menu.use-case";
 export class MenuController {
   constructor(private readonly menuUseCase: MenuUseCase) {}
 
+  @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
   @TsRestHandler(apiContract.menu.GetMenus)
   async getMenus() {
-    return tsRestHandler(apiContract.menu.GetMenus, async () => {
-      const menus = await this.menuUseCase.findAll();
+    return tsRestHandler(apiContract.menu.GetMenus, async ({ query }) => {
+      if (!query.status) {
+        const menus = await this.menuUseCase.findAll();
+        return {
+          status: 200,
+          body: menus,
+        };
+      }
+
+      const ununiqueStatus = query.status.split(",").reduce((acc, cur) => {
+        Object.values(MenuStatus).includes(cur as MenuStatus) && acc.push(cur as MenuStatus);
+        return acc;
+      }, [] as MenuStatus[]);
+      const uniqueStatus = [...new Set(ununiqueStatus)] as MenuStatus[];
+      const menus = await this.menuUseCase.findManyByStatus(uniqueStatus);
+
+      return {
+        status: 200,
+        body: menus,
+      };
+    });
+  }
+
+  @UseGuards(AuthGuard)
+  @TsRestHandler(apiContract.menu.GetMenusOnAvailable)
+  async getMenusOnAvailable() {
+    return tsRestHandler(apiContract.menu.GetMenusOnAvailable, async () => {
+      const menus = await this.menuUseCase.findManyByStatus([MenuStatus.AVAILABLE]);
       return {
         status: 200,
         body: menus,
@@ -116,24 +143,6 @@ export class MenuController {
       return {
         status: 200,
         body: updateMenu,
-      };
-    });
-  }
-
-  @Roles([Role.ADMIN, Role.MODERATOR])
-  @UseGuards(AuthGuard)
-  @TsRestHandler(apiContract.menu.GetMenusByStatus)
-  async getMenusByStatus() {
-    return tsRestHandler(apiContract.menu.GetMenusByStatus, async ({ query }) => {
-      const ununiqueStatus = query.status.split(",").reduce((acc, cur) => {
-        Object.values(MenuStatus).includes(cur as MenuStatus) && acc.push(cur as MenuStatus);
-        return acc;
-      }, [] as MenuStatus[]);
-      const uniqueStatus = [...new Set(ununiqueStatus)] as MenuStatus[];
-      const menus = await this.menuUseCase.findMayByStatus(uniqueStatus);
-      return {
-        status: 200,
-        body: menus,
       };
     });
   }
