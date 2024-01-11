@@ -5,6 +5,17 @@ import { menuModel, menuStatusModel } from "@/models";
 const GetMenus = {
   method: "GET",
   path: "/menu",
+  query: z.object({
+    status: z.string().optional(),
+  }),
+  responses: {
+    200: z.array(menuModel),
+  },
+} satisfies AppRoute;
+
+const GetMenusOnAvailable = {
+  method: "GET",
+  path: "/menu/available",
   responses: {
     200: z.array(menuModel),
   },
@@ -64,17 +75,6 @@ const UpdateMenu = {
   },
 } satisfies AppRoute;
 
-const GetMenusByStatus = {
-  method: "GET",
-  path: "/menu/status/",
-  query: z.object({
-    status: z.string(),
-  }),
-  responses: {
-    200: z.array(menuModel),
-  },
-} satisfies AppRoute;
-
 const UpdateMenuStatus = {
   method: "PATCH",
   path: "/menu/:id/status",
@@ -89,4 +89,4 @@ const UpdateMenuStatus = {
   },
 } satisfies AppRoute;
 
-export { GetMenus, CreateMenu, GetMenu, DeleteMenu, UpdateMenu, GetMenusByStatus, UpdateMenuStatus };
+export { GetMenus, GetMenusOnAvailable, CreateMenu, GetMenu, DeleteMenu, UpdateMenu, UpdateMenuStatus };
