@@ -1,4 +1,4 @@
-export const enum MenuStatus {
+export enum MenuStatus {
   RELEASED = "RELEASED",
   PREPARATION = "PREPARATION",
   UNRELEASED = "UNRELEASED",
