@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm api-contracts build && pnpm api prisma:migrate && pnpm api prisma:generate && pnpm api build
+RUN pnpm api-contracts build && pnpm api prisma:generate && pnpm api build
 
 FROM gcr.io/distroless/nodejs:${DISTROLESS_VERSION} AS Run
 ENV NODE_ENV=production
@@ -26,5 +26,5 @@ COPY --chown=nonroot:nonroot --from=Build /shokupass/packages/api-contracts/pack
 EXPOSE ${PORT}
 
 USER nonroot
-CMD ["apps/api/dist/src/main.js"]
+CMD ["/shokupass/apps/api/dist/src/main.js"]
 
