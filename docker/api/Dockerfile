@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @shokupass/api turbo build
+RUN pnpm api build
 
 FROM gcr.io/distroless/nodejs:${DISTROLESS_VERSION} AS Run
 ENV NODE_ENV=production
