@@ -20,6 +20,8 @@ WORKDIR /shokupass
 COPY --chown=nonroot:nonroot --from=Build /shokupass/node_modules ./node_modules
 COPY --chown=nonroot:nonroot --from=Build /shokupass/apps/api/node_modules ./apps/api/node_modules
 COPY --chown=nonroot:nonroot --from=Build /shokupass/apps/api/dist ./apps/api/dist
+COPY --chown=nonroot:nonroot --from=Build /shokupass/packages/api-contracts/dist ./packages/api-contracts/dist
+COPY --chown=nonroot:nonroot --from=Build /shokupass/packages/api-contracts/package.json ./packages/api-contracts/package.json
 
 EXPOSE 3000
 
