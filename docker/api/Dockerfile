@@ -1,5 +1,5 @@
 ARG PORT=3000
-ARG NODE_VERSION=18.16.1
+ARG NODE_VERSION=18.18.2
 ARG DISTROLESS_VERSION=18
 
 FROM node:${NODE_VERSION}-bullseye AS Build
@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm api prisma:generate && pnpm api build
+RUN pnpm api-contracts build && pnpm api prisma:generate && pnpm api build
 
 FROM gcr.io/distroless/nodejs:${DISTROLESS_VERSION} AS Run
 ENV NODE_ENV=production
