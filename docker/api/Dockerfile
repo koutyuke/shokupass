@@ -1,4 +1,4 @@
-ARG PORT=3000
+ARG PORT
 ARG NODE_VERSION=18.18.2
 ARG DISTROLESS_VERSION=18
 
@@ -23,7 +23,7 @@ COPY --chown=nonroot:nonroot --from=Build /shokupass/apps/api/dist ./apps/api/di
 COPY --chown=nonroot:nonroot --from=Build /shokupass/packages/api-contracts/dist ./packages/api-contracts/dist
 COPY --chown=nonroot:nonroot --from=Build /shokupass/packages/api-contracts/package.json ./packages/api-contracts/package.json
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 USER nonroot
 CMD ["apps/api/dist/src/main.js"]
