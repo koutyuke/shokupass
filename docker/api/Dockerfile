@@ -10,8 +10,7 @@ RUN npm install -g pnpm
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm api prisma:generate
-RUN pnpm api build
+RUN pnpm api prisma:generate && pnpm api build
 
 FROM gcr.io/distroless/nodejs:${DISTROLESS_VERSION} AS Run
 ENV NODE_ENV=production
