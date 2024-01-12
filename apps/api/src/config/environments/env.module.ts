@@ -7,7 +7,7 @@ import { validate } from "./validator";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [".env.product.local", ".env.product"],
+      envFilePath: [".env.development.local", ".env"],
       validate,
       isGlobal: true,
     }),
