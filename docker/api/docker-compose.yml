@@ -13,6 +13,6 @@ services:
     container_name: shokupass-api
     ports:
       - 3000:3000
-    # env_file:
-    #   - ../../.env
-    #   - ../../.env.local
+    env_file:
+      - ../../apps/api/.env
+      - ../../apps/api/.env.development.local
