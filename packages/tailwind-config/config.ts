@@ -11,7 +11,12 @@ const baseConfig: Config = {
       laptop: "1024px",
       desktop: "1280px",
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        mPlusRounded1c: ["var(--font-m-plus-rounded-1c)", "sans-serif"],
+      },
+    },
   },
   plugins: [
     plugin(function ({ addUtilities }) {
