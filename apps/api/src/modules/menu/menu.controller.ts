@@ -76,8 +76,8 @@ export class MenuController {
         price: body.price,
         description: body.description,
         image: body.image,
-        quantity: 0,
-        status: MenuStatus.PREPARATION,
+        quantity: body.quantity,
+        status: body.status,
       });
 
       return {
@@ -90,6 +90,7 @@ export class MenuController {
   @Header("Content-Type", "application/json")
   @Roles([Role.MODERATOR, Role.ADMIN])
   @UseGuards(AuthGuard)
+  @TsRestHandler(apiContract.menu.UpdateMenu)
   async updateMenu() {
     return tsRestHandler(apiContract.menu.UpdateMenu, async ({ params, body }) => {
       const findMenu = await this.menuUseCase.find(params.id);
@@ -103,6 +104,8 @@ export class MenuController {
         price: body.price,
         description: body.description,
         image: body.image,
+        quantity: body.quantity,
+        status: body.status,
       });
 
       return {
