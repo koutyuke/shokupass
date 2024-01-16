@@ -10,14 +10,16 @@ export enum MenuStatusEnum {
 
 export const menuStatusModel = z.enum(["AVAILABLE", "PREPARATION", "DELETED"]);
 
-export const menuModel = z.object({
+export const menuSchema = z.object({
   id: z.string(),
   name: z.string(),
   price: z.number(),
-  description: z.string().nullable(),
-  image: z.string().nullable(),
+  description: z.string(),
+  image: z.string(),
   quantity: z.number(),
   status: menuStatusModel,
   createdAt: z.date(),
   updatedAt: z.date(),
 });
+
+export type Menu = z.infer<typeof menuSchema>;

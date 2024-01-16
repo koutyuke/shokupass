@@ -19,10 +19,12 @@ export const roleModel = z.enum(["USER", "ADMIN", "MODERATOR"]);
 
 export const providerModel = z.enum(["GOOGLE", "DISCORD"]);
 
-export const userModel = z.object({
+export const userSchema = z.object({
   id: z.string(),
   name: z.string(),
   iconImage: z.string().nullable(),
   role: roleModel,
   provider: providerModel,
 });
+
+export type User = z.infer<typeof userSchema>;

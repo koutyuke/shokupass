@@ -1,12 +1,12 @@
 import { AppRoute } from "@ts-rest/core";
 import { z } from "zod";
-import { lockerModel } from "@/models";
+import { lockerSchema } from "@/models";
 
 const GetLockers = {
   method: "GET",
   path: "/lockers",
   responses: {
-    200: z.array(lockerModel),
+    200: z.array(lockerSchema),
   },
 } satisfies AppRoute;
 
@@ -17,7 +17,7 @@ const GetLocker = {
     id: z.string(),
   }),
   responses: {
-    200: lockerModel,
+    200: lockerSchema,
   },
 } satisfies AppRoute;
 
@@ -31,7 +31,7 @@ const OpenLocker = {
     orderId: z.string(),
   }),
   responses: {
-    200: lockerModel,
+    200: lockerSchema,
   },
 } satisfies AppRoute;
 
