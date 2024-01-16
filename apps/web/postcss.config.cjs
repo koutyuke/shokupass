@@ -1,1 +1,1 @@
-module.exports = require("@shokupass/postcss-config");
+module.exports = require("@shokupass/postcss-config/next.cjs");
