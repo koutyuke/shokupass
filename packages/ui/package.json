@@ -12,11 +12,15 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch --passWithNoTests"
   },
+  "dependencies": {
+    "lucide-react": "^0.309.0",
+    "next": "14.0.3"
+  },
   "devDependencies": {
     "@shokupass/eslint-config": "workspace:*",
+    "@shokupass/jest-config": "workspace:*",
     "@shokupass/prettier-config": "workspace:*",
     "@shokupass/typescript-config": "workspace:*",
-    "@shokupass/jest-config": "workspace:*",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "react": "^18.2.0"
