@@ -23,6 +23,6 @@
     "@shokupass/prettier-config": "workspace:*",
     "@shokupass/typescript-config": "workspace:*",
     "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.6"
+    "tailwindcss": "^3.4.1"
   }
 }
