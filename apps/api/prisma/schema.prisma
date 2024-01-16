@@ -61,8 +61,8 @@ model Menu {
   id          String      @id @default(uuid())
   name        String
   price       Int
-  description String?
-  image       String?
+  description String
+  image       String
   quantity    Int         @default(0)
   status      MenuStatus  @default(PREPARATION)
   createdAt   DateTime    @default(now()) @map("created_at")
