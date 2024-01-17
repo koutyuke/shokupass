@@ -1,2 +1,2 @@
-export { SignOutButton } from "./signOut";
-export { SignInButton } from "./signIn";
+export * from "./signOut";
+export * from "./signIn";
