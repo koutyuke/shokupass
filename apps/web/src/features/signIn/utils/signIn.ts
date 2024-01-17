@@ -1,13 +1,25 @@
-import { createBrowserSupabaseClient } from "@/utils/supabase";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
-const signIn = async () => {
+const baseUrl = process.env["NEXT_PUBLIC_SITE_BASE_URL"]!;
+
+const signInWithGoogle = async () => {
   const supabase = createBrowserSupabaseClient();
   await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3000/auth/callback/",
+      redirectTo: `${baseUrl}/auth/callback/`,
     },
   });
 };
 
-export { signIn };
+const signInWithDiscord = async () => {
+  const supabase = createBrowserSupabaseClient();
+  await supabase.auth.signInWithOAuth({
+    provider: "discord",
+    options: {
+      redirectTo: `${baseUrl}/auth/callback/`,
+    },
+  });
+};
+
+export { signInWithGoogle, signInWithDiscord };

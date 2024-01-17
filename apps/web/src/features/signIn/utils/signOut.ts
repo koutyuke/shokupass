@@ -1,4 +1,4 @@
-import { createBrowserSupabaseClient } from "@/utils/supabase";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 const signOut = async () => {
   const supabase = createBrowserSupabaseClient();
