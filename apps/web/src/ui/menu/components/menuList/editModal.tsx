@@ -26,6 +26,7 @@ const EditMenuModal: FC<Props> = ({ onClose, opened, defaultValues, menuId }) =>
     >
       <MenuFrom
         onSubmit={async data => {
+          onClose();
           await fetchClient.menu.UpdateMenu({
             body: data,
             headers: {
@@ -35,7 +36,6 @@ const EditMenuModal: FC<Props> = ({ onClose, opened, defaultValues, menuId }) =>
               id: menuId,
             },
           });
-          onClose();
         }}
         defaultValues={defaultValues}
         submitText="更新"

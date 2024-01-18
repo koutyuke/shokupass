@@ -1,9 +1,9 @@
-import { OrderStatusType, apiContract } from "@shokupass/api-contracts";
+import { Order, OrderStatusType, apiContract } from "@shokupass/api-contracts";
 import useSWR from "swr";
 import { useUserInfo } from "@/features/signIn/hooks";
 import { fetchClient } from "@/utils/fetch";
 
-const useGetOrders = (status: OrderStatusType[]) => {
+const useGetOrders = (status: OrderStatusType[], initialData: Order[], callback?: (data: Order[]) => Order[]) => {
   const { session } = useUserInfo();
   const res = useSWR(
     session
@@ -17,13 +17,17 @@ const useGetOrders = (status: OrderStatusType[]) => {
           },
         } satisfies Parameters<typeof fetchClient.order.GetOrders>[0] & { key: string })
       : null,
-    arg => fetchClient.order.GetOrders(arg),
-    { refreshInterval: 1000 },
+    arg =>
+      fetchClient.order.GetOrders(arg).then(r => {
+        if (r.status === 200) {
+          return callback ? callback(r.body) : r.body;
+        }
+        return null;
+      }),
+    { refreshInterval: 1000, fallbackData: initialData },
   );
 
-  const data = res.data?.status === 200 ? res.data.body : null;
-
-  return { ...res, data };
+  return res;
 };
 
 export { useGetOrders };

@@ -23,13 +23,13 @@ const CreateMenuModal = ({ onClose, opened }: Props) => {
     >
       <MenuFrom
         onSubmit={async data => {
+          onClose();
           await fetchClient.menu.CreateMenu({
             body: data,
             headers: {
               authorization: `Bearer ${session!.access_token}`,
             },
           });
-          onClose();
         }}
         defaultValues={{
           quantity: 0,

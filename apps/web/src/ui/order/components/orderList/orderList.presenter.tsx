@@ -1,27 +1,33 @@
 "use client";
 
 import { Table } from "@mantine/core";
-import { OrderStatusEnum } from "@shokupass/api-contracts";
+import { Locker, Order, OrderStatusEnum } from "@shokupass/api-contracts";
 import { FC } from "react";
+import { useGetLockers } from "../../hooks";
 import { useGetOrders } from "../../hooks/useGetOrders";
 import { SetOrder } from "./setOrder";
 
-const OrderList: FC = () => {
-  const {
-    data: cookingOrders,
-    isLoading: cookingOrdersIsLoading,
-    error: cookingOrdersError,
-  } = useGetOrders([OrderStatusEnum.COOKING]);
+type Props = {
+  initialData: {
+    lockers: Locker[];
+    orders: Order[];
+  };
+};
 
-  if (cookingOrdersIsLoading) {
-    return <div>loading...</div>;
-  }
+const OrderListPresenter: FC<Props> = ({ initialData }) => {
+  const { data: cookingOrders, error: cookingOrdersError } = useGetOrders(
+    [OrderStatusEnum.COOKING],
+    initialData.orders,
+    value => value.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1)),
+  );
 
-  if (cookingOrdersError || !cookingOrders) {
+  const { data: lockers, error: lockersError } = useGetLockers(initialData.lockers, value =>
+    value.sort((a, b) => (Number(a.id) > Number(b.id) ? 1 : -1)),
+  );
+
+  if (cookingOrdersError || !cookingOrders || lockersError || !lockers) {
     return null;
   }
-
-  cookingOrders.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1));
 
   return (
     <Table horizontalSpacing="sm" verticalSpacing="lg">
@@ -48,7 +54,7 @@ const OrderList: FC = () => {
               </ul>
             </Table.Td>
             <Table.Td width="100">
-              <SetOrder order={order} />
+              <SetOrder order={order} lockers={lockers} />
             </Table.Td>
           </Table.Tr>
         ))}
@@ -57,4 +63,4 @@ const OrderList: FC = () => {
   );
 };
 
-export { OrderList };
+export { OrderListPresenter };
