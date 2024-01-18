@@ -33,7 +33,7 @@ const Header: FC = () => {
         <UserMenuPopover user={user} signOut={() => supabase.auth.signOut()} />
       ) : (
         <Link
-          href="/signin"
+          href="/sign-in"
           className="flex h-10 place-items-center rounded-lg border border-gray-300 px-6 transition hover:bg-gray-300/10"
         >
           <span className="text-lg font-bold">Sign in</span>
