@@ -8,10 +8,10 @@ const middleware = async (request: NextRequest) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session && !request.url.includes("/signin")) {
-    return NextResponse.redirect(new URL("/signin", request.url));
+  if (!session && !request.url.includes("/sign-in")) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
-  if (session && request.url.includes("/signin")) {
+  if (session && request.url.includes("/sign-in")) {
     return NextResponse.redirect(new URL("/", request.url));
   }
   return response;
