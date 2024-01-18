@@ -1,5 +1,5 @@
 import { Modal } from "@mantine/core";
-import { ComponentProps } from "react";
+import { ComponentProps, FC } from "react";
 import { MenuFrom } from "../menuFrom";
 import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
 import { fetchClient } from "@/utils/fetch";
@@ -9,13 +9,13 @@ type Props = Pick<ComponentProps<typeof Modal>, "onClose" | "opened"> &
     menuId: string;
   };
 
-const EditMenuModal = ({ onClose, opened, defaultValues, menuId }: Props) => {
+const EditMenuModal: FC<Props> = ({ onClose, opened, defaultValues, menuId }) => {
   const { session } = useUserInfo();
   return (
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Create New Menu"
+      title="Edit Menu"
       centered
       overlayProps={{
         blur: 3,
