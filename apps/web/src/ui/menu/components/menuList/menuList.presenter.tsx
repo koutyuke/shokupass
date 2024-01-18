@@ -17,7 +17,7 @@ const MenuListPresenter: FC<Props> = ({ initialData }) => {
     value.sort((a, b) => {
       if (a.status === "AVAILABLE" && b.status === "AVAILABLE") {
         if (a.quantity === 0 && b.quantity === 0) {
-          return a.updatedAt > b.updatedAt ? -1 : 1;
+          return a.createdAt > b.createdAt ? -1 : 1;
         }
         if (a.quantity === 0) {
           return 1;
@@ -28,7 +28,7 @@ const MenuListPresenter: FC<Props> = ({ initialData }) => {
       }
 
       if (a.status === "PREPARATION" && b.status === "PREPARATION") {
-        return a.updatedAt > b.updatedAt ? -1 : 1;
+        return a.createdAt > b.createdAt ? -1 : 1;
       }
 
       if (a.status === "AVAILABLE") return -1;
