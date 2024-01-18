@@ -1,11 +1,11 @@
-import { MenuStatusEnum, apiContract } from "@shokupass/api-contracts";
+import { Menu, MenuStatusEnum, apiContract } from "@shokupass/api-contracts";
 import useSWR from "swr";
 import { useUserInfo } from "@/features/signIn/hooks";
 import { fetchClient } from "@/utils/fetch";
 
-const useGetMenus = () => {
+const useGetMenus = (initialData: Menu[], callback?: (data: Menu[]) => Menu[]) => {
   const { session } = useUserInfo();
-  const res = useSWR(
+  const res = useSWR<Menu[] | null>(
     session
       ? ({
           key: apiContract.menu.GetMenus.path,
@@ -17,13 +17,17 @@ const useGetMenus = () => {
           },
         } satisfies Parameters<typeof fetchClient.menu.GetMenus>[0] & { key: string })
       : null,
-    arg => fetchClient.menu.GetMenus(arg),
-    { refreshInterval: 1000 },
+    arg =>
+      fetchClient.menu.GetMenus(arg).then(r => {
+        if (r.status === 200) {
+          return callback ? callback(r.body) : r.body;
+        }
+        return null;
+      }),
+    { refreshInterval: 1000, fallbackData: initialData },
   );
 
-  const data = res.data?.status === 200 ? res.data.body : null;
-
-  return { ...res, data };
+  return res;
 };
 
 export { useGetMenus };
