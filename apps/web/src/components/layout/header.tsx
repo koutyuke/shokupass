@@ -25,7 +25,7 @@ const Header: FC = () => {
         <Link href="/menu" className="transition hover:text-black/50">
           <span className="text-lg font-bold ">Menu</span>
         </Link>
-        <Link href="/Order" className="transition hover:text-black/50">
+        <Link href="/order" className="transition hover:text-black/50">
           <span className="text-lg font-bold">Order</span>
         </Link>
       </nav>
