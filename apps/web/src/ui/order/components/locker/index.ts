@@ -1,1 +1,1 @@
-export * from "./lockerStatusPanel";
+export * from "./lockerStatusPanel.container";
