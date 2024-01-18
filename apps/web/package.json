@@ -14,14 +14,25 @@
     "test:watch": "jest --watchAll --passWithNoTests"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
+    "@mantine/core": "^7.4.1",
+    "@mantine/hooks": "^7.4.1",
     "@shokupass/ui": "workspace:*",
     "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "^2.39.0",
+    "@ts-rest/core": "^3.30.5",
+    "destyle.css": "^4.0.0",
     "next": "14.0.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.49.3",
+    "sharp": "^0.33.2",
+    "swr": "^2.2.4",
+    "uuid": "^3.4.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@shokupass/api-contracts": "workspace:*",
     "@shokupass/eslint-config": "workspace:*",
     "@shokupass/jest-config": "workspace:*",
     "@shokupass/postcss-config": "workspace:*",
@@ -31,6 +42,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cross-env": "^7.0.3",
     "eslint": "^8.53.0"
   }
 }

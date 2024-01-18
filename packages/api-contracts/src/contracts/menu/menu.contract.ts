@@ -1,6 +1,6 @@
 import { AppRoute } from "@ts-rest/core";
 import { z } from "zod";
-import { menuModel, menuStatusModel } from "@/models";
+import { menuSchema, menuStatusModel } from "@/models";
 
 const GetMenus = {
   method: "GET",
@@ -9,7 +9,7 @@ const GetMenus = {
     status: z.string().optional(),
   }),
   responses: {
-    200: z.array(menuModel),
+    200: z.array(menuSchema),
   },
 } satisfies AppRoute;
 
@@ -17,7 +17,7 @@ const GetMenusOnAvailable = {
   method: "GET",
   path: "/menu/available",
   responses: {
-    200: z.array(menuModel),
+    200: z.array(menuSchema),
   },
 } satisfies AppRoute;
 
@@ -25,13 +25,15 @@ const CreateMenu = {
   method: "POST",
   path: "/menu",
   body: z.object({
-    name: z.string(),
-    price: z.number(),
+    name: z.string().min(1),
+    price: z.number().min(0),
     description: z.string(),
-    image: z.string(),
+    image: z.string().url(),
+    quantity: z.number().min(0),
+    status: menuStatusModel,
   }),
   responses: {
-    200: menuModel,
+    200: menuSchema,
   },
 } satisfies AppRoute;
 
@@ -42,7 +44,7 @@ const GetMenu = {
     id: z.string(),
   }),
   responses: {
-    200: menuModel,
+    200: menuSchema,
   },
 } satisfies AppRoute;
 
@@ -54,7 +56,7 @@ const DeleteMenu = {
   }),
   body: z.object({}),
   responses: {
-    200: menuModel,
+    200: menuSchema,
   },
 } satisfies AppRoute;
 
@@ -66,12 +68,14 @@ const UpdateMenu = {
   }),
   body: z.object({
     name: z.string(),
-    price: z.number(),
+    price: z.number().min(0),
     description: z.string(),
     image: z.string(),
+    quantity: z.number().min(0),
+    status: menuStatusModel,
   }),
   responses: {
-    200: menuModel,
+    200: menuSchema,
   },
 } satisfies AppRoute;
 
@@ -85,7 +89,7 @@ const UpdateMenuStatus = {
     status: menuStatusModel,
   }),
   responses: {
-    200: menuModel,
+    200: menuSchema,
   },
 } satisfies AppRoute;
 

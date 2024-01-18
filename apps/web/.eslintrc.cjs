@@ -7,7 +7,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["src/app/**/* "],
+      files: ["src/app/**/*", "src/middleware.ts"],
       rules: {
         "import/no-default-export": "off",
       },

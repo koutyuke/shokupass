@@ -1,12 +1,12 @@
 import { AppRoute } from "@ts-rest/core";
 import { z } from "zod";
-import { orderModel, paymentModel, userModel } from "@/models";
+import { orderSchema, paymentSchema, userSchema } from "@/models";
 
 const GetMyUser = {
   method: "GET",
   path: "/users/@me",
   responses: {
-    200: userModel,
+    200: userSchema,
   },
 } satisfies AppRoute;
 
@@ -14,7 +14,7 @@ const GetMyOrders = {
   method: "GET",
   path: "/users/@me/orders",
   responses: {
-    200: z.array(orderModel),
+    200: z.array(orderSchema),
   },
 } satisfies AppRoute;
 
@@ -25,7 +25,7 @@ const GetMyOrder = {
     id: z.string(),
   }),
   responses: {
-    200: orderModel,
+    200: orderSchema,
   },
 } satisfies AppRoute;
 
@@ -37,7 +37,7 @@ const UpdateMyOrderPayment = {
   }),
   body: z.object({}),
   responses: {
-    200: paymentModel,
+    200: paymentSchema,
   },
 } satisfies AppRoute;
 

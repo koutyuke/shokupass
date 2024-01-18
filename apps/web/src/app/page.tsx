@@ -1,18 +1,26 @@
-import { SignInButton, SignOutButton } from "@/features/signIn/components";
-import { UserInfo } from "@/features/signIn/components/userInfo";
+"use client";
 
-const Home = async () => (
-  <main className="h-full w-full">
-    <div>
-      <SignInButton />
-    </div>
-    <div>
-      <SignOutButton />
-    </div>
-    <div>
-      <UserInfo />
-    </div>
-  </main>
-);
+import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
+
+const Home = () => {
+  const { user, session } = useUserInfo();
+  return (
+    <main className="h-full w-full pt-24">
+      <div>{user ? user.id : "no user"}</div>
+      <div className="w-screen">
+        {session && (
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(session.access_token);
+            }}
+          >
+            copy token
+          </button>
+        )}
+      </div>
+    </main>
+  );
+};
 
 export default Home;

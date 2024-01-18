@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { itemModel } from "./item.model";
-import { lockerModel } from "./locker.model";
-import { paymentModel } from "./payment.model";
+import { itemSchema } from "./item.model";
+import { lockerSchema } from "./locker.model";
+import { paymentSchema } from "./payment.model";
 
 export type OrderStatusType =
   | "PENDING"
@@ -35,13 +35,15 @@ export const orderStatusModel = z.enum([
   "DELETED",
 ]);
 
-export const orderModel = z.object({
+export const orderSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  items: z.array(itemModel),
+  items: z.array(itemSchema),
   status: orderStatusModel,
-  payment: paymentModel,
-  locker: lockerModel.nullable(),
+  payment: paymentSchema,
+  locker: lockerSchema.nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
+
+export type Order = z.infer<typeof orderSchema>;

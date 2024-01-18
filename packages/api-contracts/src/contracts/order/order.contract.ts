@@ -1,6 +1,6 @@
 import { AppRoute } from "@ts-rest/core";
 import { z } from "zod";
-import { lockerModel, orderModel, orderStatusModel, paymentModel } from "@/models";
+import { lockerSchema, orderSchema, orderStatusModel, paymentSchema } from "@/models";
 
 const GetOrders = {
   method: "GET",
@@ -9,7 +9,7 @@ const GetOrders = {
     status: z.string().optional(),
   }),
   responses: {
-    200: z.array(orderModel),
+    200: z.array(orderSchema),
   },
 } satisfies AppRoute;
 
@@ -20,12 +20,12 @@ const CreateOrder = {
     items: z.array(
       z.object({
         menuId: z.string(),
-        quantity: z.number(),
+        quantity: z.number().min(1),
       }),
     ),
   }),
   responses: {
-    200: orderModel,
+    200: orderSchema,
   },
 } satisfies AppRoute;
 
@@ -37,7 +37,7 @@ const GetOrder = {
   }),
   headers: z.object({}),
   responses: {
-    200: orderModel,
+    200: orderSchema,
   },
 } satisfies AppRoute;
 
@@ -49,7 +49,7 @@ const DeleteOrder = {
   }),
   body: z.object({}),
   responses: {
-    200: orderModel,
+    200: orderSchema,
   },
 } satisfies AppRoute;
 
@@ -63,7 +63,7 @@ const UpdateOrderStatus = {
     status: orderStatusModel,
   }),
   responses: {
-    200: orderModel,
+    200: orderSchema,
   },
 } satisfies AppRoute;
 
@@ -75,7 +75,7 @@ const UpdateOrderPayment = {
   }),
   body: z.object({}),
   responses: {
-    200: paymentModel,
+    200: paymentSchema,
   },
 } satisfies AppRoute;
 
@@ -89,7 +89,7 @@ const UpdateOrderLocker = {
     lockerId: z.string(),
   }),
   responses: {
-    200: lockerModel.nullable(),
+    200: lockerSchema.nullable(),
   },
 } satisfies AppRoute;
 

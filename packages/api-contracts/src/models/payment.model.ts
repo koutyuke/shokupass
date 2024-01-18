@@ -12,7 +12,7 @@ export enum PaymentStatusEnum {
 
 export const paymentStatusModel = z.enum(["PENDING", "COMPLETED", "REFUNDED", "EXPIRED", "FAILED"]);
 
-export const paymentModel = z.object({
+export const paymentSchema = z.object({
   id: z.string(),
   codeId: z.string(),
   status: paymentStatusModel,
@@ -21,3 +21,5 @@ export const paymentModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
 });
+
+export type Payment = z.infer<typeof paymentSchema>;

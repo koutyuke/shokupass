@@ -1,7 +1,9 @@
 import { z } from "zod";
-import { menuModel } from "./menu.model";
+import { menuSchema } from "./menu.model";
 
-export const itemModel = z.object({
-  menu: menuModel,
+export const itemSchema = z.object({
+  menu: menuSchema,
   quantity: z.number(),
 });
+
+export type Item = z.infer<typeof itemSchema>;

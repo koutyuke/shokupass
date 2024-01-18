@@ -5,8 +5,8 @@ export class Menu {
   readonly id: string;
   readonly name: string;
   readonly price: number;
-  readonly description: string | null;
-  readonly image: string | null;
+  readonly description: string;
+  readonly image: string;
   readonly quantity: number;
   readonly status: MenuStatusType;
   readonly createdAt: Date;
@@ -16,8 +16,8 @@ export class Menu {
     id: string;
     name: string;
     price: number;
-    description: string | null;
-    image: string | null;
+    description: string;
+    image: string;
     quantity: number;
     status: MenuStatusType;
     createdAt: Date;
