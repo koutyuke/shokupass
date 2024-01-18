@@ -3,10 +3,9 @@ import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 const uploadStorage = async (file: File, bucketName: string, folderName: string): Promise<string | null> => {
   const supabase = createBrowserSupabaseClient();
-  const filePath = `${folderName}/${uuidv4()}.jpeg`; // 画像の保存先のpathを指定
-  const { error, data: uploadData } = await supabase.storage.from(bucketName).upload(filePath, file, {
-    contentType: "image/jpeg",
-  });
+  const fileExt = file.name.split(".").pop();
+  const filePath = `${folderName}/${uuidv4()}.${fileExt}`;
+  const { error, data: uploadData } = await supabase.storage.from(bucketName).upload(filePath, file);
   if (error) {
     return null;
   }
