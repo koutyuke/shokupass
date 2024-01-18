@@ -1,44 +1,49 @@
 "use client";
 
 import { Image } from "#ui/components/web/image";
-import { Loader, Table } from "@mantine/core";
+import { Table } from "@mantine/core";
+import { Menu } from "@shokupass/api-contracts";
 import { FC } from "react";
 import { useGetMenus } from "../../hooks";
 import { DetailedOptionsMenu } from "./detailedOptionsMenu";
 import { MenuStatusBadge } from "./statusBadge";
 
-const MenuList: FC = () => {
-  const { data, isLoading, error } = useGetMenus();
+type Props = {
+  initialData: Menu[];
+};
 
-  if (data === null || error) {
+const MenuListPresenter: FC<Props> = ({ initialData }) => {
+  const { data, error } = useGetMenus(initialData, value =>
+    value.sort((a, b) => {
+      if (a.status === "AVAILABLE" && b.status === "AVAILABLE") {
+        if (a.quantity === 0 && b.quantity === 0) {
+          return a.updatedAt > b.updatedAt ? -1 : 1;
+        }
+        if (a.quantity === 0) {
+          return 1;
+        }
+        if (b.quantity === 0) {
+          return -1;
+        }
+      }
+
+      if (a.status === "PREPARATION" && b.status === "PREPARATION") {
+        return a.updatedAt > b.updatedAt ? -1 : 1;
+      }
+
+      if (a.status === "AVAILABLE") return -1;
+      if (b.status === "AVAILABLE") return 1;
+
+      if (a.status === "PREPARATION") return -1;
+      if (b.status === "PREPARATION") return 1;
+
+      return 0;
+    }),
+  );
+
+  if (error || !data) {
     return <div>error</div>;
   }
-
-  if (isLoading) {
-    return (
-      <div className="flex w-full justify-start">
-        <Loader color="blue" />
-      </div>
-    );
-  }
-
-  const menus = data.sort((a, b) => {
-    if (a.status === "AVAILABLE" && b.status === "AVAILABLE") {
-      if (a.quantity === 0) {
-        return 1;
-      }
-      if (b.quantity === 0) {
-        return -1;
-      }
-    }
-    if (a.status === "AVAILABLE") return -1;
-    if (b.status === "AVAILABLE") return 1;
-
-    if (a.status === "PREPARATION") return -1;
-    if (b.status === "PREPARATION") return 1;
-
-    return 0;
-  });
 
   return (
     <Table horizontalSpacing="sm" verticalSpacing="lg">
@@ -54,7 +59,7 @@ const MenuList: FC = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {menus.map(menu => (
+        {data.map(menu => (
           <Table.Tr key={menu.id}>
             <Table.Td width={100}>
               <Image src={menu.image} alt="products image" height={50} width={50} priority />
@@ -82,4 +87,4 @@ const MenuList: FC = () => {
   );
 };
 
-export { MenuList };
+export { MenuListPresenter };
