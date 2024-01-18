@@ -25,11 +25,11 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - / (root path)
-     * - /signin (sign-in path)
+     * - /auth (auth routes)
      * - /api (API routes)
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|$|api).*)",
+    "/((?!_next/static|_next/image|favicon.ico|$|auth|api).*)",
   ],
 };
 
