@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { CreateMenu } from "../components/createMenu";
-import { MenuList } from "../components/menuList";
+import { MenuList } from "../components/menuList/menuList.container";
 
 const PageContents: FC = () => (
   <div className="h-fit w-full space-y-4">

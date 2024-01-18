@@ -1,13 +1,29 @@
-"use client";
-
+/* eslint-disable react/jsx-no-useless-fragment */
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
+import { fetchClient } from "@/utils/fetch";
+import { createServerSupabaseClient } from "@/utils/supabase/client";
 
-const WithAuthLayout = ({ children }: { children: ReactNode }) => {
-  const { user } = useUserInfo();
+const WithAuthLayout = async ({ children }: { children: ReactNode }) => {
+  const cookieStore = cookies();
+  const supabase = createServerSupabaseClient(cookieStore);
+  const session = await supabase.auth.getSession();
+
+  if (!session.data.session) {
+    redirect("/sign-in");
+  }
+
+  const { status, body } = await fetchClient.user.GetMyUser({
+    headers: {
+      authorization: `Bearer ${session.data.session.access_token}`,
+    },
+  });
+
+  const user = status === 200 ? body : null;
 
   if (user && user.role !== "USER") {
-    return children;
+    return <>{children}</>;
   }
 
   return (

@@ -1,1 +1,1 @@
-export * from "./menuList";
+export * from "./menuList.presenter";
