@@ -2,33 +2,15 @@
 
 import { Image } from "#ui/components/web/image";
 import { Loader, Table } from "@mantine/core";
-import { MenuStatusEnum, apiContract } from "@shokupass/api-contracts";
 import { FC } from "react";
-import useSWR from "swr";
+import { useGetMenus } from "../../hooks";
 import { DetailedOptionsMenu } from "./detailedOptionsMenu";
 import { MenuStatusBadge } from "./statusBadge";
-import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
-import { fetchClient } from "@/utils/fetch";
 
 const MenuList: FC = () => {
-  const { session } = useUserInfo();
-  const { data, isLoading } = useSWR(
-    session
-      ? ({
-          key: apiContract.menu.GetMenus.path,
-          query: {
-            status: `${MenuStatusEnum.AVAILABLE},${MenuStatusEnum.PREPARATION}`,
-          },
-          headers: {
-            authorization: `Bearer ${session!.access_token}`,
-          },
-        } satisfies Parameters<typeof fetchClient.menu.GetMenus>[0] & { key: string })
-      : null,
-    arg => fetchClient.menu.GetMenus(arg),
-    { refreshInterval: 1000 },
-  );
+  const { data, isLoading, error } = useGetMenus();
 
-  if (data?.status !== 200) {
+  if (data === null || error) {
     return <div>error</div>;
   }
 
@@ -40,7 +22,7 @@ const MenuList: FC = () => {
     );
   }
 
-  const menus = data.body.sort((a, b) => {
+  const menus = data.sort((a, b) => {
     if (a.status === "AVAILABLE" && b.status === "AVAILABLE") {
       if (a.quantity === 0) {
         return 1;
@@ -64,27 +46,33 @@ const MenuList: FC = () => {
         <Table.Tr>
           <Table.Th className="text-xl">画像</Table.Th>
           <Table.Th className="text-xl">商品名</Table.Th>
-          <Table.Th className="max-w-20 text-xl">説明文</Table.Th>
+          <Table.Th className="text-xl">説明文</Table.Th>
           <Table.Th className="text-xl">価格</Table.Th>
           <Table.Th className="text-xl">在庫</Table.Th>
           <Table.Th className="text-xl">状態</Table.Th>
-          <Table.Th className="" />
+          <Table.Th />
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
         {menus.map(menu => (
           <Table.Tr key={menu.id}>
-            <Table.Td>
+            <Table.Td width={100}>
               <Image src={menu.image} alt="products image" height={50} width={50} priority />
             </Table.Td>
-            <Table.Td className="w-[8rem] align-middle">{menu.name}</Table.Td>
-            <Table.Td className="max-w-[8rem] truncate align-middle">{menu.description}</Table.Td>
-            <Table.Td className="max-w-[4rem] align-middle">{menu.price}</Table.Td>
-            <Table.Td className="max-w-[4rem] align-middle">{menu.quantity}</Table.Td>
-            <Table.Td className="max-w-[4rem] align-middle">
+            <Table.Td className="align-middle" width={150}>
+              {menu.name}
+            </Table.Td>
+            <Table.Td className="truncate align-middle">{menu.description}</Table.Td>
+            <Table.Td className="align-middle" width={100}>
+              {menu.price}
+            </Table.Td>
+            <Table.Td className="align-middle" width={100}>
+              {menu.quantity}
+            </Table.Td>
+            <Table.Td className="align-middle" width={110}>
               <MenuStatusBadge status={menu.quantity === 0 && menu.status === "AVAILABLE" ? "SOLD_OUT" : menu.status} />
             </Table.Td>
-            <Table.Td className="max-w-[2rem] align-middle">
+            <Table.Td className="text-center align-middle" width={64}>
               <DetailedOptionsMenu menu={menu} />
             </Table.Td>
           </Table.Tr>
