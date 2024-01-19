@@ -44,8 +44,8 @@ export class LockerController {
     });
   }
 
-  @Roles([Role.MODERATOR, Role.ADMIN])
-  @UseGuards(AuthGuard)
+  // @Roles([Role.MODERATOR, Role.ADMIN])
+  // @UseGuards(AuthGuard)
   @TsRestHandler(apiContract.locker.OpenLocker)
   async openLocker() {
     return tsRestHandler(apiContract.locker.OpenLocker, async ({ params, body }) => {
