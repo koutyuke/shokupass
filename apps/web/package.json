@@ -22,6 +22,7 @@
     "@supabase/supabase-js": "^2.39.0",
     "@ts-rest/core": "^3.30.5",
     "destyle.css": "^4.0.0",
+    "jotai": "^2.6.2",
     "next": "14.0.5-canary.60",
     "react": "^18",
     "react-dom": "^18",
