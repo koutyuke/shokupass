@@ -6,7 +6,9 @@ import { EnvService } from "@/config/environments/env.service";
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
   const port = app.get(EnvService).Port;
-  app.enableCors();
+  app.enableCors({
+    origin: "*",
+  });
   await app.listen(port);
 }
 bootstrap();
