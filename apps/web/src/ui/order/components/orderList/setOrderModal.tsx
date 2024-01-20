@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Modal, NativeSelect, Table } from "@mantine/core";
 import { Locker, Order } from "@shokupass/api-contracts";
+import { useAtomValue } from "jotai";
 import { ComponentProps, FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useUserInfo } from "@/features/signIn/hooks";
+import { sessionAtom } from "@/store/session";
 import { fetchClient } from "@/utils/fetch";
 
 type Props = Pick<ComponentProps<typeof Modal>, "onClose" | "opened"> & {
@@ -13,7 +14,7 @@ type Props = Pick<ComponentProps<typeof Modal>, "onClose" | "opened"> & {
 };
 
 const SetOrderModal: FC<Props> = ({ onClose, opened, order, lockers }) => {
-  const { session } = useUserInfo();
+  const session = useAtomValue(sessionAtom);
 
   const {
     register,

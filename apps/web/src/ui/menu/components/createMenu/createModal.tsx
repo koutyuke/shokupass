@@ -1,13 +1,14 @@
 import { Modal } from "@mantine/core";
+import { useAtomValue } from "jotai";
 import { ComponentProps } from "react";
 import { MenuFrom } from "../menuFrom";
-import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
+import { sessionAtom } from "@/store/session";
 import { fetchClient } from "@/utils/fetch";
 
 type Props = Pick<ComponentProps<typeof Modal>, "onClose" | "opened">;
 
 const CreateMenuModal = ({ onClose, opened }: Props) => {
-  const { session } = useUserInfo();
+  const session = useAtomValue(sessionAtom);
   return (
     <Modal
       opened={opened}
