@@ -1,6 +1,7 @@
 import { Button, Modal } from "@mantine/core";
+import { useAtomValue } from "jotai";
 import { ComponentProps, FC } from "react";
-import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
+import { sessionAtom } from "@/store/session";
 import { fetchClient } from "@/utils/fetch";
 
 type Props = Pick<ComponentProps<typeof Modal>, "onClose" | "opened"> & {
@@ -8,7 +9,7 @@ type Props = Pick<ComponentProps<typeof Modal>, "onClose" | "opened"> & {
 };
 
 const DeleteMenuModal: FC<Props> = ({ menuId, onClose, opened }) => {
-  const { session } = useUserInfo();
+  const session = useAtomValue(sessionAtom);
   return (
     <Modal
       opened={opened}

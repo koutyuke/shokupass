@@ -1,12 +1,11 @@
 "use client";
 
-import { useUserInfo } from "@/features/signIn/hooks/useUserInfo";
+import { useSession } from "@/hooks";
 
 const Home = () => {
-  const { user, session } = useUserInfo();
+  const session = useSession();
   return (
     <main className="h-full w-full pt-24">
-      <div>{user ? user.id : "no user"}</div>
       <div className="w-screen">
         {session && (
           <button

@@ -1,10 +1,11 @@
 import { Order, apiContract } from "@shokupass/api-contracts";
+import { useAtomValue } from "jotai";
 import useSWR from "swr";
-import { useUserInfo } from "@/features/signIn/hooks";
+import { sessionAtom } from "@/store/session";
 import { fetchClient } from "@/utils/fetch";
 
 const useGetLockersWithOrder = (initialData: { id: string; order: Order | null }[]) => {
-  const { session } = useUserInfo();
+  const session = useAtomValue(sessionAtom);
   const res = useSWR<
     | {
         id: string;
@@ -12,16 +13,15 @@ const useGetLockersWithOrder = (initialData: { id: string; order: Order | null }
       }[]
     | null
   >(
-    session
-      ? ({
-          key: `${apiContract.locker.GetLockers.path}withOrder`,
+    session ? `${apiContract.locker.GetLockers.path}withOrder` : null,
+    async () => {
+      const lockerList = await fetchClient.locker
+        .GetLockers({
           headers: {
             authorization: `Bearer ${session!.access_token}`,
           },
-        } satisfies Parameters<typeof fetchClient.locker.GetLockers>[0] & { key: string })
-      : null,
-    async arg => {
-      const lockerList = await fetchClient.locker.GetLockers(arg).then(r => (r.status === 200 ? r.body : null));
+        })
+        .then(r => (r.status === 200 ? r.body : null));
       if (lockerList === null) return null;
 
       const lockerListWithOrder = await Promise.all(
