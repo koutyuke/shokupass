@@ -2,6 +2,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
+import { AuthProvider } from "@/features/signIn/components/authProvider";
 import { fetchClient } from "@/utils/fetch";
 import { createServerSupabaseClient } from "@/utils/supabase/client";
 
@@ -23,7 +24,7 @@ const WithAuthLayout = async ({ children }: { children: ReactNode }) => {
   const user = status === 200 ? body : null;
 
   if (user && user.role !== "USER") {
-    return <>{children}</>;
+    return <AuthProvider>{children}</AuthProvider>;
   }
 
   return (
