@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin.js";
+import plugin from "tailwindcss/plugin";
 
 const baseConfig: Config = {
   mode: "jit",

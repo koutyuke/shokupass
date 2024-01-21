@@ -1,2 +1,2 @@
-export { baseConfig } from "./config.js";
-export * from "./utils.js";
+export { baseConfig } from "./config";
+export * from "./utils";
