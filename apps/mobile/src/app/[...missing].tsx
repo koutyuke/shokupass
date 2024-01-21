@@ -1,7 +1,6 @@
 import { Link, Stack } from "expo-router";
 import { StyleSheet } from "react-native";
-
-import { Text, View } from "@/components/Themed";
+import { View, Text } from "@/components/elements";
 
 const styles = StyleSheet.create({
   container: {

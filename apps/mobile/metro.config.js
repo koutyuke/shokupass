@@ -9,6 +9,7 @@ const workspaceRoot = path.resolve(projectRoot, "../..");
 const config = getDefaultConfig(projectRoot, {
   isCSSEnabled: true,
 });
+const { transformer, resolver } = config;
 
 // 1. Watch all files within the monorepo
 config.watchFolders = [workspaceRoot];
@@ -19,5 +20,10 @@ config.resolver.nodeModulesPaths = [
 ];
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
+config.resolver.assetExts = resolver.assetExts.filter((ext) => ext !== "svg")
+config.resolver.sourceExts = [...resolver.sourceExts, "svg"]
+
+config.transformer.babelTransformerPath = require.resolve("react-native-svg-transformer")
+
 
 module.exports = config;

@@ -27,6 +27,8 @@ export class PaymentUseCase {
       return null;
     }
 
+    console.log(JSON.stringify(paymentData));
+
     const payment = await this.paymentRepository.create({
       id,
       codeId: paymentData.codeId,

@@ -48,7 +48,6 @@ export class PaypayService {
     };
 
     const res = await this.paypay.QRCodeCreate(payload).then(res => {
-      console.log(res);
       if (res.STATUS === 201) {
         const successResponse = res as HttpsClientSuccess;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +60,7 @@ export class PaypayService {
       res && {
         codeId: res.codeId,
         link: res.deeplink,
-        expiresAt: new Date(res.expiryDate),
+        expiresAt: new Date(res.expiryDate * 1000),
       }
     );
   }

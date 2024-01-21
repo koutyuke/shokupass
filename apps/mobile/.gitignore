@@ -45,3 +45,7 @@ GoogleService-Info.plist
 
 # ios
 ios/
+# Expo
+.expo
+dist/
+web-build/

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectToken } from "src/common/constant/injectToken";
+import { v4 as uuid } from "uuid";
 import { PaymentUseCase } from "../payment/payment.use-case";
 import { Order } from "./domain/order.domain";
 import { OrderStatus } from "./dto/order.enum";
@@ -51,9 +52,10 @@ export class OrderUseCase {
   }
 
   async create(order: Pick<Order, "userId" | "items" | "status">) {
+    const id = uuid();
     const payment = await this.paymentUseCase.create(
       order.items.reduce((acc, cur) => acc + cur.menu.price * cur.quantity, 0),
-      "",
+      `orders/${id}`,
       order.items.map(item => ({
         id: item.menu.id,
         name: item.menu.name,
@@ -69,6 +71,7 @@ export class OrderUseCase {
 
     const createOrder = await this.orderRepository.create({
       ...order,
+      id,
       paymentId: payment.id,
     });
     return createOrder;
@@ -102,7 +105,7 @@ export class OrderUseCase {
   async setNewPayment(order: Order) {
     const newPayment = await this.paymentUseCase.create(
       order.items.reduce((acc, cur) => acc + cur.menu.price * cur.quantity, 0),
-      "",
+      `orders/${order.id}`,
       order.items.map(item => ({
         id: item.menu.id,
         name: item.menu.name,
