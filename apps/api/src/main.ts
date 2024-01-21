@@ -8,6 +8,6 @@ async function bootstrap() {
     cors: true,
   });
   const port = app.get(EnvService).Port;
-  await app.listen(port);
+  await app.listen(port, "0.0.0.0");
 }
 bootstrap();
