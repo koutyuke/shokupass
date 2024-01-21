@@ -8,6 +8,7 @@ export interface IOrderRepository {
   findAll(): Promise<Order[]>;
   create(
     order: {
+      id?: Order["id"];
       paymentId: string;
     } & Pick<Order, "userId" | "items" | "status">,
   ): Promise<Order>;
