@@ -11,7 +11,12 @@ module.exports = {
       laptop: "1024px",
       desktop: "1280px",
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        mPlusRounded1c: ["MPLUSRounded1c_500Medium", "sans-serif"],
+        mPlusRounded1cBold: ["MPLUSRounded1c_700Bold", "sans-serif"],
+      },
+    },
   },
   plugins: [
     plugin(function ({ addUtilities }) {
