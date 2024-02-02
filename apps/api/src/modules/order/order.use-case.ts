@@ -30,12 +30,6 @@ export class OrderUseCase {
     return findAllOrder;
   }
 
-  async findMany(func: (order: Order) => boolean) {
-    const findAll = await this.orderRepository.findAll();
-    const findManyOrder = findAll.filter(func);
-    return findManyOrder;
-  }
-
   async findManyById(ids: string[]) {
     const findManyOrder = await this.orderRepository.findMany(ids);
     return findManyOrder;
@@ -47,7 +41,7 @@ export class OrderUseCase {
   }
 
   async findManyByStatus(status: OrderStatusType[]) {
-    const findManyOrderByStatus = await this.findMany(order => status.includes(order.status));
+    const findManyOrderByStatus = await this.orderRepository.findManyByStatus(status);
     return findManyOrderByStatus;
   }
 
