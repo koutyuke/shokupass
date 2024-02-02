@@ -30,12 +30,11 @@ export class OrderController {
         };
       }
 
-      const ununiqueStatus = query.status.split(",").reduce((acc, cur) => {
+      const status = query.status.split(",").reduce((acc, cur) => {
         Object.values(OrderStatus).includes(cur as OrderStatus) && acc.push(cur as OrderStatus);
         return acc;
       }, [] as OrderStatus[]);
-      const uniqueStatus = [...new Set(ununiqueStatus)] as OrderStatus[];
-      const orders = await this.orderUseCase.findManyByStatus(uniqueStatus);
+      const orders = await this.orderUseCase.findManyByStatus(status);
 
       return {
         status: 200,
