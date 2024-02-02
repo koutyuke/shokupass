@@ -28,6 +28,17 @@ export class MenuRepository implements IMenuRepository {
     return menus.map(menu => new Menu(menu));
   }
 
+  async findManyByStatus(status: Menu["status"][]): Promise<Menu[]> {
+    const menus = await this.prismaService.menu.findMany({
+      where: {
+        status: {
+          in: status,
+        },
+      },
+    });
+    return menus.map(menu => new Menu(menu));
+  }
+
   async create(menu: {
     id?: Menu["id"];
     name: Menu["name"];

@@ -5,6 +5,7 @@ export interface IOrderRepository {
   findByUserIdAndId(userId: Order["userId"], id: Order["id"]): Promise<Order | null>;
   findMany(ids: Order["id"][]): Promise<Order[]>;
   findManyByUserId(userId: Order["userId"]): Promise<Order[]>;
+  findManyByStatus(status: Order["status"][]): Promise<Order[]>;
   findAll(): Promise<Order[]>;
   create(
     order: {

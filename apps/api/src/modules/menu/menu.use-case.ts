@@ -16,19 +16,13 @@ export class MenuUseCase {
     return findMenu;
   }
 
-  async findMany(func: (menu: Menu) => boolean) {
-    const findAll = await this.menuRepository.findAll();
-    const findManyMenu = findAll.filter(func);
-    return findManyMenu;
-  }
-
   async findManyById(ids: string[]) {
     const findManyMenu = await this.menuRepository.findManyById(ids);
     return findManyMenu;
   }
 
   async findManyByStatus(status: MenuStatus[]) {
-    const visibleMenus = await this.findMany(menu => status.includes(menu.status));
+    const visibleMenus = await this.menuRepository.findManyByStatus(status);
     return visibleMenus;
   }
 

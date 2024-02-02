@@ -23,13 +23,11 @@ export class MenuController {
           body: menus,
         };
       }
-
-      const ununiqueStatus = query.status.split(",").reduce((acc, cur) => {
+      const status = query.status.split(",").reduce((acc, cur) => {
         Object.values(MenuStatus).includes(cur as MenuStatus) && acc.push(cur as MenuStatus);
         return acc;
       }, [] as MenuStatus[]);
-      const uniqueStatus = [...new Set(ununiqueStatus)] as MenuStatus[];
-      const menus = await this.menuUseCase.findManyByStatus(uniqueStatus);
+      const menus = await this.menuUseCase.findManyByStatus(status);
 
       return {
         status: 200,

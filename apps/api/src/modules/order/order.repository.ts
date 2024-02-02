@@ -133,6 +133,37 @@ export class OrderRepository implements IOrderRepository {
     );
   }
 
+  async findManyByStatus(status: Order["status"][]): Promise<Order[]> {
+    const orders = await this.prismaService.order.findMany({
+      where: {
+        status: {
+          in: status,
+        },
+      },
+      include: {
+        MenuOrder: {
+          include: {
+            menu: true,
+          },
+        },
+        payment: true,
+        locker: true,
+      },
+    });
+    return orders.map(
+      order =>
+        new Order({
+          ...order,
+          items: order.MenuOrder.map(menuOrder => ({
+            menu: new Menu(menuOrder.menu),
+            quantity: menuOrder.menuQuantity,
+          })),
+          payment: order.payment && new Payment(order.payment),
+          locker: order.locker && new Locker(order.locker),
+        }),
+    );
+  }
+
   async findAll(): Promise<Order[]> {
     const orders = await this.prismaService.order.findMany({
       include: {
